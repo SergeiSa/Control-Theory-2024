@@ -1,0 +1,592 @@
+\documentclass{beamer}
+
+\input{settings.tex}
+
+
+\title{Stabilizing Control}
+\subtitle{Control Theory, Lecture 3}
+\author{by Sergei Savin}
+\centering
+\date{\mydate}
+
+
+
+\begin{document}
+\maketitle
+
+
+%\begin{frame}{Content}
+%
+%\begin{itemize}
+%\item Stabilizing control
+%\item Error dynamics
+%\item Affine trajectory tracking
+%\item Point-to-point control
+%\item Pure state feedback
+%\item Read more
+%\end{itemize}
+%
+%\end{frame}
+
+
+
+\begin{frame}{Changing stability}
+% \framesubtitle{O}
+\begin{flushleft}
+
+Here are two LTIs:
+
+\begin{equation}
+    \dot{x} = 2 x
+\end{equation}
+
+\begin{equation}
+    \dot{x} = 2 x + u
+\end{equation}
+
+First one is autonomous and unstable. Second one is not autonomous, and we won't know whether or not the solution converges to zero, until we know what $u$ is.
+
+\bigskip
+
+If we pick $u=0$, the result is an unstable equation. But we can also pick $u$ such that the resulting dynamics is stable, such as $u=-3x$:
+
+\begin{equation}
+    \dot{x} = 2 x + u = 2 x - 3x = -x
+\end{equation}
+
+\begin{block}{ }
+So, we can use \emph{control input} $u$ to change stability of the system!
+\end{block}
+
+
+\end{flushleft}
+\end{frame}
+
+
+
+
+
+\begin{frame}{Stabilizing control}
+% \framesubtitle{O}
+\begin{flushleft}
+
+\begin{definition}
+The problem of finding control law $\bo{u}$ that make a certain solution $\bo{x}^*$ of dynamical system $\dot{\bo{x}} = \bo{f}(\bo{x}, \bo{u})$ stable is called \emph{stabilizing control problem}
+\end{definition}
+
+\bigskip
+
+This is true for both linear and non-linear systems. But for linear systems we can get a lot more details about this problem, if we restrict our choice of control law.
+
+
+
+\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Linear control}
+\framesubtitle{Closed-loop system}
+\begin{flushleft}
+
+Consider an LTI system:
+
+\begin{equation}
+    \dot{\bo{x}} = \bo{A}\bo{x} + \bo{B}\bo{u}
+\end{equation}
+
+and let us chose \emph{control as a linear function of the state} $x$:
+
+\begin{equation}
+    \bo{u} = -\bo{K}\bo{x}
+\end{equation}
+
+We call matrix $\bo{K}$ \emph{control gain}. Thus, we know how the system is going to look when the control is applied:
+
+\begin{equation}
+    \dot{\bo{x}} = \bo{A}\bo{x} - \bo{B}\bo{K}\bo{x}
+\end{equation}
+\begin{equation}
+\label{eq:closed_loop}
+    \dot{\bo{x}} = (\bo{A} - \bo{B}\bo{K})\bo{x}
+\end{equation}
+
+Note that \eqref{eq:closed_loop} is an autonomous system. We call this a \emph{closed loop} system.
+
+\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Linear control}
+%\framesubtitle{Stability of the closed-loop system}
+\begin{flushleft}
+
+Observing the system $\dot{\bo{x}} = (\bo{A} - \bo{B}\bo{K})\bo{x}$ we obtained, we can notice that we already have the tools to analyse its stability:
+
+\begin{block}{Stability condition for LTI closed-loop system}
+The real parts of the eigenvalues of the matrix $(\bo{A} - \bo{B}\bo{K})$ should be negative for asymptotic stability, or non-positive for stability in the sense of Lyapunov.
+\end{block}
+
+\begin{block}{Hurwitz matrix}
+	If square matrix $\bo{M}$ has eigenvalues with strictly negative real parts, it is called Hurwitz. We will denote it as $\bo{M} \in \mathcal{H}$.
+\end{block}
+
+%\bigskip
+
+So, all you need to do is to find such $\bo{K}$ that $(\bo{A} - \bo{B}\bo{K})$ is Hurwitz, and you made a an asymptotically stable closed-loop system!
+
+\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Scalar case}
+	%\framesubtitle{Stability of the closed-loop system}
+	\begin{flushleft}
+		
+		Let us consider the following system:
+		
+		\begin{equation}
+			\dot x = a x + b u
+		\end{equation}
+	
+		we can choose the following linear control law: $u = - k x$. The close loop system for this example is:
+		
+		\begin{equation}
+			\dot x = (a- bk) x
+		\end{equation}		
+	
+		The solution to the closed-loop system is:
+		
+		\begin{equation}
+			x(t) =  x_0 e^{(a- bk)t}
+		\end{equation}		
+		
+		As long as $a- bk < 0$, the solution is converging to zero. Since we can pick $k$, we can choose it so that $a- bk = -q$, where $q$ is a positive number. Then, we pick $k = \frac{q+a}{b}$, giving us stable system with eigenvalue $-q$.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Multivariable case}
+	%\framesubtitle{Stability of the closed-loop system}
+	\begin{flushleft}
+		
+		Let us consider the following system:
+		%
+		\begin{equation}
+			\begin{bmatrix}
+				\dot x_1 \\ \dot x_2
+			\end{bmatrix} 
+		= 
+		\begin{bmatrix}
+			a_{11} & a_{12} \\ 0 & a_{22}
+		\end{bmatrix}
+		\begin{bmatrix}
+			x_1 \\ x_2
+		\end{bmatrix} 
+	+ 
+		\begin{bmatrix}
+			b \\ 0
+		\end{bmatrix}
+		u
+		\end{equation}
+		
+		With control law:
+		%
+		\begin{equation}
+			u
+			= 
+			-
+			\begin{bmatrix}
+				k_1 & k_2
+			\end{bmatrix}
+			\begin{bmatrix}
+				x_1 \\ x_2
+			\end{bmatrix} 
+		\end{equation}
+		
+		Close-loop system is:
+		%
+		\begin{equation}
+			\begin{bmatrix}
+				\dot x_1 \\ \dot x_2
+			\end{bmatrix} 
+			= 
+			\begin{bmatrix}
+				a_{11}-b k_1 & a_{12}-b k_2 \\ 0 & a_{22}
+			\end{bmatrix}
+			\begin{bmatrix}
+				x_1 \\ x_2
+			\end{bmatrix} 
+		\end{equation}
+		
+		The eigenvalues of the closed-loop system are $a_{11}-b k_1$ and $a_{22}$.  The second eigenvalue cannot be influenced by the choice of control gains. If $a_{22} < 0$, we need to pick $k_1$, such as  $a_{11}-b k_1 = -q$, where $q$ is a positive number: $k_1 = \frac{q + a_{11}}{b}$.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Trajectory tracking (1)}
+	%\framesubtitle{Stability of the closed-loop system}
+	\begin{flushleft}
+		
+		Let the function $\bo{x}^* = \bo{x}^*(t)$ and control $\bo{u}^* = \bo{u}^*(t)$ be a solution to the system $\dot{\bo{x}} = \bo{A}\bo{x} + \bo{B}\bo{u}$, meaning:
+		%
+		\begin{equation}
+			\dot{\bo{x}}^* = \bo{A}\bo{x}^* + \bo{B}\bo{u}^*
+		\end{equation}
+	
+		We call $\bo{x}^*(t)$ a \emph{reference} or \emph{reference input} and $\bo{u}^*(t)$ a \emph{feed-forward control}.
+		
+		\bigskip
+		
+		We can try to find control law that would stabilize this reference trajectory. We begin by finding the difference between $\dot{\bo{x}}^*$ and $\dot{\bo{x}}$:
+		%
+		\begin{equation}
+			\dot{\bo{x}}^* - \dot{\bo{x}}= \bo{A}(\bo{x}^*-\bo{x}) + \bo{B}(\bo{u}^*-\bo{u})
+		\end{equation}
+		
+		We define new variables: $\bo{e} = \bo{x}^* - \bo{x}$ and $\bo{v} = \bo{u}^* - \bo{u}$:
+		%
+		\begin{equation}
+			\dot{\bo{e}} = \bo{A}\bo{e} + \bo{B}\bo{v}
+		\end{equation}
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Trajectory tracking (1)}
+	%\framesubtitle{Stability of the closed-loop system}
+	\begin{flushleft}
+		
+		We call $\bo{e}$ \emph{control error} and the equation $\dot{\bo{e}} = \bo{A}\bo{e} + \bo{B}\bo{v}$ is \emph{error dynamics}.
+		
+		With error dynamics we are back to the familiar problem - find control law $\bo{v} = -\bo{K}\bo{e}$ that makes closed-loop system stable:
+		%
+		\begin{equation}
+			\dot{\bo{e}} = (\bo{A} - \bo{B}\bo{K}) \bo{e}
+		\end{equation}
+		
+		In original variables it is:
+		%
+		\begin{equation}
+			\bo{u} = \bo{K}(\bo{x}^* - \bo{x}) + \bo{u}^*
+		\end{equation}
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Point-to-point control}
+	%\framesubtitle{Stability of the closed-loop system}
+	\begin{flushleft}
+		
+		Consider the system $\dot{\bo{x}} = \bo{A}\bo{x} + \bo{B}\bo{u}$ and the reference input $\bo{x}^* = \text{const}$ and feed-forward control $\bo{u}^*= \text{const}$. This implies:
+		
+		\begin{equation}
+			\bo{A}\bo{x}^* + \bo{B}\bo{u}^* = 0
+		\end{equation}		
+		
+		We can try to find control law that would stabilize this reference trajectory. The error dynamics and the stabilizing control law are the same as in the previous case. But this time, we can find $\bo{u}^*$ if it is not provided:
+		
+		\begin{equation}
+			 \bo{u}^* = -\bo{B}^+\bo{A}\bo{x}^*
+		\end{equation}				
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{New input}
+	%\framesubtitle{Stability of the closed-loop system}
+	\begin{flushleft}
+		
+		Consider the system $\dot{\bo{x}} = \bo{A}\bo{x} + \bo{B}\bo{u}$ and control law $\bo{u} = \bo{K}(\bo{x}^*(t) - \bo{x}) + \bo{u}^*(t)$. We can find the expression for the resulting system:
+		
+		\begin{align}
+			\dot{\bo{x}} = \bo{A}\bo{x} + \bo{B}\bo{K}(\bo{x}^*(t) - \bo{x}) + \bo{B}\bo{u}^*(t) \\
+			\dot{\bo{x}} = (\bo{A}- \bo{B}\bo{K})\bo{x} +\bo{B}\bo{K}\bo{x}^*(t) + \bo{B}\bo{u}^*(t)
+		\end{align}		
+		
+		Assuming that $\bo{u}^*(t) = 0$ gives us a simplified system:
+		
+		\begin{align}
+			\dot{\bo{x}} =  (\bo{A}- \bo{B}\bo{K})\bo{x} +\bo{B}\bo{K}\bo{x}^*(t)
+		\end{align}				
+		
+		Here we can see that $\bo{x}^*(t)$ acts as a new input, and it makes sense to discuss how the system reacts to various inputs.
+		
+	\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{}
+	
+	\centering{\huge Extra material} 
+	
+\end{frame}
+
+
+\begin{frame}{Input-output control (State-Space), 1}
+	%\framesubtitle{Stability of the closed-loop system}
+	\begin{flushleft}
+		
+		Given a system where we measure $\bo{y}$:
+		%
+		\begin{equation}
+			\begin{cases}
+				\dot{\bo{x}} = \bo{A}\bo{x} + \bo{B}\bo{u} \\
+				\bo{y} = \bo{C}\bo{x}
+			\end{cases}
+		\end{equation}
+		%
+		it makes sense that the control law can use output $\bo{y}$, but not state $\bo{x}$:
+		%
+		\begin{equation}
+			\bo{u} = -\bo{K}\bo{y} 
+		\end{equation}		
+		
+		Closed loop system in this case becomes: 
+		%
+		\begin{equation}
+			\dot{\bo{x}} = (\bo{A}- \bo{B}\bo{K}\bo{C})\bo{x} 
+		\end{equation}		
+		
+		The problem with this control method is that finding $\bo{K}$ such that $\bo{A}- \bo{B}\bo{K}\bo{C} \in \mathbb{H}$ is not always possible.
+		
+	\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Input-output control (State-Space), 2}
+	%\framesubtitle{Stability of the closed-loop system}
+	\begin{flushleft}
+		
+		\begin{example}
+			Let us consider a second order system:
+			
+			\begin{equation}
+				\begin{cases}
+					\begin{bmatrix}
+						\dot x_1 \\ \dot x_2
+					\end{bmatrix} = 
+					\begin{bmatrix}
+						0 & 1 \\
+						-1 & 2
+					\end{bmatrix}
+					\begin{bmatrix}
+						x_1 \\ x_2
+					\end{bmatrix}
+					+
+					\begin{bmatrix}
+						0 \\ u
+					\end{bmatrix}
+					\\
+					y = \begin{bmatrix}		1 & 0	\end{bmatrix} 
+					\begin{bmatrix}
+						x_1 \\ x_2
+					\end{bmatrix}
+				\end{cases}
+			\end{equation}
+			
+			Control law $u = -k y$ is equivalent to $u = -k x_1$. Closed loop system takes form:
+			
+			\begin{equation}
+				\begin{bmatrix}
+					\dot x_1 \\ \dot x_2
+				\end{bmatrix} = 
+				\begin{bmatrix}
+					0 & 1 \\
+					-(k+1) & 2
+				\end{bmatrix}
+				\begin{bmatrix}
+					x_1 \\ x_2
+				\end{bmatrix}
+			\end{equation}
+			
+			This system will not be stable under any choice of $k$.
+		\end{example}
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Input-output control (State-Space), 3}
+	%\framesubtitle{Stability of the closed-loop system}
+	\begin{flushleft}
+		
+		Assuming that $\bo{C}\bo{B} = 0$, we can find $\dot{\bo{y}}$:
+		%
+		\begin{equation}
+			\dot{\bo{y}} = \bo{C}\dot{\bo{x}} = \bo{C}(\bo{A}\bo{x} + \bo{B}\bo{u}) = \bo{C}\bo{A}\bo{x}
+		\end{equation}		
+		
+		With that, we could propose control law:
+		%
+		\begin{align}
+			\bo{u} = -\bo{K}_p \bo{y} - \bo{K}_d \dot{\bo{y}} \\
+			\bo{u} = -(\bo{K}_p \bo{C} + \bo{K}_d \bo{C}\bo{A})\bo{x}
+		\end{align}
+	
+		This looks mysterious, so let us clarify this with an example.				
+		
+	\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Input-output control (State-Space), 4}
+	%\framesubtitle{Stability of the closed-loop system}
+	\begin{flushleft}
+		
+		\begin{example}
+			Let us consider spring-damper system:
+			
+			\begin{equation}
+				\begin{cases}
+					\begin{bmatrix}
+						\dot x_1 \\ \dot x_2
+					\end{bmatrix} = 
+					\begin{bmatrix}
+						0 & 1 \\
+						-c & -\mu
+					\end{bmatrix}
+					\begin{bmatrix}
+						x_1 \\ x_2
+					\end{bmatrix}
+					+
+					\begin{bmatrix}
+						0 \\ u
+					\end{bmatrix}
+					\\
+					y = \begin{bmatrix}		1 & 0	\end{bmatrix} 
+					\begin{bmatrix}
+						x_1 \\ x_2
+					\end{bmatrix}
+				\end{cases}
+			\end{equation}
+			
+			We can see that $y = x_1$ and $\dot y = x_2$, we can check that $\bo{C}\bo{B} = 0$. Control law $u = -k_p y - k_d \dot y$ is equivalent to $u = -k_p x_1 - k_d x_2$. Closed loop system takes form:
+			
+			\begin{equation}
+				\begin{bmatrix}
+					\dot x_1 \\ \dot x_2
+				\end{bmatrix} = 
+				\begin{bmatrix}
+					0 & 1 \\
+					-c-k_p & -\mu- k_d
+				\end{bmatrix}
+				\begin{bmatrix}
+					x_1 \\ x_2
+				\end{bmatrix}
+			\end{equation}
+			
+			This can be achieved with regular state feedback. 
+		\end{example}
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Input-output control (State-Space), 5}
+	%\framesubtitle{Stability of the closed-loop system}
+	\begin{flushleft}
+		
+		Here is a counter-example:
+		
+		\begin{example}
+			
+			\begin{equation}
+				\begin{cases}
+					\dot x = 2x + u \\
+					y = x
+				\end{cases}
+			\end{equation}
+			%
+			If we allow control law $u = -3 y +k \dot y = -3 x + k \dot x$. This gives us closed-loop system:
+			%
+			\begin{align}
+				\dot x = -x + k \dot x \\
+				\dot x-k \dot x = -x
+			\end{align}		
+			
+			If we choose $k = 0.9$ we get close-loop dynamics $0.1\dot x = -x$ with solution $x = C e^{-10t}$.
+			
+			If we choose $k = 0.99$ we get close-loop dynamics $0.01\dot x = -x$ with solution $x = C e^{-100t}$.
+		\end{example}
+		
+	\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Input-output control (State-Space), 6}
+	%\framesubtitle{Stability of the closed-loop system}
+	\begin{flushleft}
+		
+		We observed in the last example that small changes in control gain lead to vast changes in the closed-loop dynamics. This behavior is not physical. 
+		
+		\bigskip
+		
+		The difference between this and the previous example is that here we have a \textcolor{red}{first order system with a first order controller} (not acceptable), while in the previous example we had a \textcolor{mydarkgreen}{second-order system with a first order controller}. 
+		
+		\bigskip
+		
+		In general, one needs to be careful introducing derivatives in the control law.
+		
+	\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Input-output control (ODE)}
+	%\framesubtitle{Stability of the closed-loop system}
+	\begin{flushleft}
+		
+		With ODE representation, input-output control design is a little more clear. For example, consider a system:
+		
+		\begin{equation}
+			\ddot y + a \dot y + b y = u
+		\end{equation}
+	
+		We can propose a control law $u = -k_p y - k_d \dot y$. This is called \emph{proportional-derivative (PD) control}. 
+		
+		\bigskip
+		
+		Closed-loop system in this case looks like:
+		
+		\begin{equation}
+			\ddot y + (a + k_d) \dot y + (b + k_p) y = 0
+		\end{equation}
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Read more}
+
+\begin{itemize}
+\item Richard M. Murray Control and Dynamical Systems California Institute of Technology \bref{http://www.cds.caltech.edu/~murray/books/AM08/pdf/obc-trajgen_03Jan10.pdf}{Optimization-Based Control}
+\item \bref{https://apmonitor.com/pdc/index.php/Main/ModelSimulation}{Dynamic Simulation in Python}
+\end{itemize}
+\end{frame}
+
+
+
+
+\myqrframe
+
+\end{document}

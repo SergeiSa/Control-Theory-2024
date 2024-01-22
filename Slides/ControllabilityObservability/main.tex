@@ -1,0 +1,585 @@
+\documentclass{beamer}
+
+\input{settings.tex}
+
+
+\title{Controllability, Observability}
+\subtitle{Control Theory, Lecture 9}
+\author{by Sergei Savin}
+\centering
+\date{\mydate}
+
+
+
+\begin{document}
+\maketitle
+
+
+\begin{frame}{Content}
+\begin{itemize}
+\item Cayley–Hamilton
+\item Controllability of Discrete LTI
+\begin{itemize}
+    \item Controllability matrix
+    \item Controllability criterion
+\end{itemize}
+\item Observability of Discrete LTI
+\begin{itemize}
+    \item Dual system
+    \item Observability criterion
+\end{itemize}
+%\item Analytical solution to ODE
+%\item Forced State Response
+\item Controllability of Continuous-Time LTI
+\end{itemize}
+\end{frame}
+
+
+
+
+
+\begin{frame}{Cayley–Hamilton}
+	% \framesubtitle{Limited control}
+	\begin{flushleft}
+		
+		Equation $\text{det}(\bo{M} - \lambda\bo{I}) = 0$ is called \emph{characteristic equation} of matrix $\bo{M}$, its roots being eigenvalues of the matrix.
+		
+		\bigskip
+		
+		\begin{theorem}[Cayley–Hamilton]
+			A matrix $\bo{M} \in \R^{n, n}$ satisfies its own characteristic equation.
+		\end{theorem}
+		
+		A characteristic equation can be written as $\lambda^n + a_{n-1}\lambda^{n-1} + ... + a_0  = 0$, meaning that we can write:
+		
+		\begin{equation}
+			\bo{M}^n + a_{n-1}\bo{M}^{n-1} + ... + a_0\bo{I}  = 0
+		\end{equation}	
+		
+		Meaning that \textcolor{mydarkblue}{$\bo{M}^n$ is a linear combination of $\bo{M}^{n-1}$, $\bo{M}^{n-2}$, ..., $\bo{I}$}.
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Definitions}
+	% \framesubtitle{Limited control}
+	\begin{flushleft}
+		
+		\begin{definition}[Controllability]
+			A system is controllable on time interval $t_0 \leq t \leq t_f$, if it is possible to find control input $u(t)$ that would drive the system to a desired state $\bo{x}(t_f)$ from any initial state $\bo{x}(t_0)$.
+		\end{definition}
+		
+		\begin{definition}[Observability]
+			A system is observable on time interval $t_0 \leq t \leq t_f$, if using output $\bo{y}(t)$ on that time interval it is possible to estimate exactly the state of the system $\bo{x}(t_f)$, given any initial estimation error.
+		\end{definition}
+	
+		\begin{definition}[Observability, alternative]
+				A system is observable on time interval $t_0 \leq t \leq t_f$, if any initial state $\bo{x}(t_0)$ is uniquely determined by output $\bo{y}(t)$ on that interval.
+		\end{definition}
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+
+\begin{frame}{Controllability of Discrete LTI}
+% \framesubtitle{Definitions}
+\begin{flushleft}
+
+Consider discrete LTI:
+\begin{equation}
+\bo{x}_{i+1} = \bo{A}  \bo{x}_i + \bo{B} \bo{u}_i
+\end{equation}
+
+Assume the initial state is $\bo{x}_1$. Then we can deduce that:
+
+\begin{align*}
+\bo{x}_2 &= \bo{A} \bo{x}_1 + \bo{B} \bo{u}_1 \\
+\bo{x}_3 &= \bo{A} \bo{x}_2 + \bo{B} \bo{u}_2 = \bo{A} (\bo{A} \bo{x}_1 + \bo{B} \bo{u}_1) + \bo{B} \bo{u}_2 \\
+\bo{x}_4 &= \bo{A} \bo{x}_3 + \bo{B} \bo{u}_3 = \bo{A} (\bo{A} (\bo{A} \bo{x}_1 + \bo{B} \bo{u}_1) + \bo{B} \bo{u}_2) + \bo{B} \bo{u}_3 \\
+... \\
+\bo{x}_{n+1} &= \bo{A}^n \bo{x}_1 + \bo{A}^{n-1} \bo{B} \bo{u}_1 + ... + 
+\bo{A}^{n - k} \bo{B} \bo{u}_{k} + ... + 
+\bo{B} \bo{u}_n
+\end{align*}
+
+\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Controllability matrix}
+%\framesubtitle{Controllability matrix}
+\begin{flushleft}
+
+Equation $\bo{x}_{n+1} = \bo{A}^n \bo{x}_1 + \bo{A}^{n-1} \bo{B} \bo{u}_1 + ... 
++ \bo{A}^{n - k} \bo{B} \bo{u}_{k} + ...
+\bo{B} \bo{u}_n$ can be re-written as:
+
+\begin{equation}
+    \bo{x}_{n+1} - \bo{A}^n \bo{x}_1 = 
+    \begin{bmatrix}
+    \bo{B} &
+    \bo{A} \bo{B} &
+    \bo{A}^2 \bo{B} & ... &
+    \bo{A}^{n - 1} \bo{B}
+    \end{bmatrix}    
+    \begin{bmatrix}
+    \bo{u}_{n} \\
+    \bo{u}_{n-1} \\
+    \bo{u}_{n-2} \\ ... \\
+    \bo{u}_{1}
+    \end{bmatrix}
+\end{equation}
+
+Notice that in order for the system to go from $\bo{x}_1$ to $\bo{x}_{n+1}$, vector $\bo{x}_{n+1} - \bo{A}^n \bo{x}_1$ needs be in the column space of $\mathcal{C} = \begin{bmatrix}
+    \bo{B} &
+    \bo{A} \bo{B} & ... &
+    \bo{A}^{n - 1} \bo{B}
+    \end{bmatrix}$.
+
+Since $\bo{x}_{n+1}$ can be anything, and $\bo{x}_1$ might be equal to zero (among other possibilities), we should require that all vectors in $\R^n$ are in the column space of $\mathcal{C}$, meaning $\mathcal{C}$ needs to be full row rank.
+
+\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Controllability criterion}
+%\framesubtitle{Controllability criterion}
+\begin{flushleft}
+
+\begin{block}{Controllability}
+For a system $\bo{x}_{i+1} = \bo{A}  \bo{x}_i + \bo{B} \bo{u}_i$, where $\bo{x} \in \R^n$, if the matrix $\mathcal{C} = \begin{bmatrix}
+    \bo{B} &
+    \bo{A} \bo{B} & ... &
+    \bo{A}^{n - 1} \bo{B}
+    \end{bmatrix}$ is full row rank (i.e. $\text{rank}(\mathcal{C}) = n$), any state can be reached, which means that \emph{the system is controllable}.
+\end{block}
+
+\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Controllability matrix rank}
+	% \framesubtitle{Limited control}
+	\begin{flushleft}
+		
+		What happens if we add more columns to the controllability matrix, for example $\bo{A}^n \bo{B}$? Consider the matrix:
+		
+		\begin{equation}
+			\mathcal{C}_+ = \begin{bmatrix}
+				\bo{B} &
+				\bo{A} \bo{B} & ... &
+				\bo{A}^{n - 1} \bo{B} &
+				\bo{A}^n \bo{B}
+			\end{bmatrix}
+		\end{equation}
+		
+		But from Cayley–Hamilton we know that: 
+		
+		\begin{align}
+			\bo{A}^n = -a_{n-1}\bo{A}^{n-1} - ... - a_0\bo{I} 
+			\\
+			\bo{A}^n\bo{B} = -a_{n-1}\bo{A}^{n-1}\bo{B} - ... - a_0\bo{B}
+		\end{align}
+		
+		Meaning that columns of $\bo{A}^n\bo{B}$ are expressed as linear combination of columns of $\mathcal{C}$, hence the matrix $\mathcal{C}_+$ has the same rank as $\mathcal{C}$.
+		
+	\end{flushleft}
+\end{frame}
+
+
+%\begin{frame}{Controllability matrix rank}
+%	% \framesubtitle{Limited control}
+%	\begin{flushleft}
+%		
+%		If you are interested why the controllability matrix for not include more columns, like $\bo{A}^n$, Consider the following: 
+%		
+%		The controllability matrix can be written as 
+%		
+%		\begin{equation}
+%			\mathcal{C} = \begin{bmatrix}
+%				\bo{I} &
+%				\bo{A}  & ... &
+%				\bo{A}^{n - 1} 
+%			\end{bmatrix}
+%			\begin{bmatrix}
+%				\bo{B} & \bo{0} & ... & \bo{0} \\
+%				\bo{0}  & \bo{B} & ... & \bo{0} \\
+%				...  & ... & ... & ... \\
+%				\bo{0}  & \bo{0} & ... & \bo{B} 
+%			\end{bmatrix}
+%		\end{equation}
+%		
+%		meaning that the rank of $\mathcal{C}$ depends only on matrix $\begin{bmatrix}
+%			\bo{I} &
+%			\bo{A}  & ... &
+%			\bo{A}^{n - 1} 
+%		\end{bmatrix}$. Adding  to it columns $\bo{A}^n$ does not change the rank, as $\bo{A}^n$ is a linear combination of the other columns, as we proved in the previous slide.
+%		
+%	\end{flushleft}
+%\end{frame}
+
+
+
+
+\begin{frame}{Observability of Discrete LTI}
+% \framesubtitle{Definitions}
+\begin{flushleft}
+
+Consider discrete LTI:
+\begin{equation}
+\begin{cases}
+\bo{x}_{i+1} = \bo{A}  \bo{x}_i + \bo{B} \bo{u}_i \\
+\bo{y}_i     = \bo{C}  \bo{x}_i
+\end{cases}
+\end{equation}
+
+And an observer:
+
+\begin{equation}
+\hat{\bo{x}}_{i+1} = \bo{A}  \hat{\bo{x}}_i + \bo{B} \bo{u}_i + 
+\bo{L} (\bo{y}_i - \bo{C} \hat{\bo{x}}_i)
+\end{equation}
+
+Remember that we can define observation error $\bo{e}_i = \hat{\bo{x}}_i - \bo{x}_i$ and write its dynamics:
+
+\begin{equation}
+\bo{e}_{i+1} = \bo{A} \bo{e}_i - 
+\bo{L} \bo{C} \bo{e}_i
+\end{equation}
+
+Dual system (which is stable if and only if the original is stable), has form:
+
+\begin{equation}
+\varepsilon_{i+1} = \bo{A}^\top \varepsilon_i - 
+\bo{C}^\top \bo{L}^\top \varepsilon_i
+\end{equation}
+
+
+\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Observability of Discrete LTI}
+\framesubtitle{Dual system}
+\begin{flushleft}
+
+Dynamical system $\varepsilon_{i+1} = \bo{A}^\top \varepsilon_i - \bo{C}^\top \bo{L}^\top \varepsilon_i$, we can be represented as:
+
+\begin{equation}
+\begin{cases}
+\varepsilon_{i+1} = \bo{A}^\top \varepsilon_i + \bo{C}^\top \bo{v}_i \\
+\bo{v}_i = - \bo{L}^\top \varepsilon_i
+\end{cases}
+\end{equation}
+
+Controllability matrix of this system is:
+
+\begin{equation}
+\mathcal{O}^\top = \begin{bmatrix}
+    \bo{C}^\top &
+    (\bo{A}^\top) \bo{C}^\top & ... &
+    (\bo{A}^\top)^{n - 1} \bo{C}^\top
+    \end{bmatrix}
+\end{equation}
+
+It is easier to represent this matrix in its transposed form:
+
+\begin{equation}
+\mathcal{O} = \begin{bmatrix}
+    \bo{C} \\
+    \bo{C}\bo{A}  \\ ... \\
+    \bo{C}\bo{A}^{n - 1}
+    \end{bmatrix}
+\end{equation}
+
+\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Observability criterion}
+%\framesubtitle{Observability criterion}
+\begin{flushleft}
+
+\begin{block}{Observability}
+For a system $\bo{x}_{i+1} = \bo{A}  \bo{x}_i + \bo{B} \bo{u}_i$ and $\bo{y}_i = \bo{C}  \bo{x}_i$, where $\bo{x} \in \R^n$, if the matrix $\mathcal{O} = \begin{bmatrix}
+    \bo{C} \\
+    \bo{C}\bo{A}  \\ ... \\
+    \bo{C}\bo{A}^{n - 1}
+    \end{bmatrix}$ is full column rank (i.e. $\text{rank}(\mathcal{O}) = n$), observation error can go to zero from any initial position, which means that \emph{the system is observable}.
+\end{block}
+
+\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Controllability, continuous-time (1)}
+	% \framesubtitle{Limited control}
+	\begin{flushleft}
+		
+		Let us consider matrix exponential $e^{\bo{A}t}$ is defined as a series:
+		
+		\begin{equation}
+			e^{\bo{A}t} = \bo{I}+\bo{A}t+\frac{1}{2} \bo{A}\bo{A}t^2
+			+\frac{1}{6} \bo{A}\bo{A}\bo{A}t^3 + ...
+		\end{equation}
+	
+		Using Cayley–Hamilton we can observe that any powers of $\bo{A}$ higher than $n$ can be represented as a linear combination of lower powers. This gives us the following expression:
+		%
+		\begin{equation}
+			e^{\bo{A}t} = \phi_0(t)\bo{I}+\phi_1(t)\bo{A}+\phi_2(t) \bo{A}^2 + ...
+ + \phi_{n-1}(t) \bo{A}^{n-1}
+		\end{equation}
+		
+		This allows us to re-write the forced state response:
+		
+		\begin{align*}
+			\bo{x}(t) &= e^{\bo{A}t}  \bo{x}(0) + 
+			\int_{0}^{t} e^{\bo{A}(t-\tau)} \bo{b}  u(\tau) d\tau
+			\\
+			\bo{x}(t) &= e^{\bo{A}t}  \bo{x}(0) + 
+			\int_{0}^{t} 
+			( \phi_0(t-\tau)\bo{I}+\phi_1(t-\tau)\bo{A}+ ... 
+			\\
+			&+ \phi_{n-1}(t-\tau) \bo{A}^{n-1} ) 
+			\bo{b}  u(\tau) \ d\tau
+		\end{align*}
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Controllability, continuous-time (2)}
+	% \framesubtitle{Limited control}
+	\begin{flushleft}
+		
+		\begin{align*}
+			\bo{x}(t) &= e^{\bo{A}t}  \bo{x}(0) + 
+			\int_{0}^{t} \phi_0(t-\tau)\bo{b} u(\tau) d\tau
+			\\
+			&+
+			\int_{0}^{t} \phi_1(t-\tau)\bo{A}\bo{b}  u(\tau) d\tau+ ... 
+		    \int_{0}^{t} \phi_{n-1}(t-\tau) \bo{A}^{n-1} 
+			\bo{b}  u(\tau) d\tau 
+		\end{align*}
+	%
+		\begin{align*}
+		\bo{x}(t) -  e^{\bo{A}t}  \bo{x}(0) = 
+		\begin{bmatrix}
+			\bo{b} & \bo{A}\bo{b}& ... &\bo{A}^{n-1}\bo{b}
+		\end{bmatrix}
+		\begin{bmatrix}
+			\int_{0}^{t} \phi_0(t-\tau) u(\tau) d\tau \\
+			\int_{0}^{t} \phi_1(t-\tau) u(\tau) d\tau \\
+			... \\
+			\int_{0}^{t} \phi_{n-1}(t-\tau) u(\tau) d\tau \\
+		\end{bmatrix}
+		\end{align*}
+		
+		This shows that if controllability matrix is rank-deficient, it would not be possible to achieve some state from some initial condition.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{PBH controllability criterion}
+	% \framesubtitle{Limited control}
+	\begin{flushleft}
+		
+		There is an alternative way to test if pair $(\bo{A}, \ \bo{B})$ is controllable:
+		
+		\begin{block}{PBH controllability criterion}
+			If for any $\lambda \in \mathbb{C}$, the the matrix $[ (\bo{A}-\lambda\bo{I}), \bo{B}]$ has full row rank, then the pair $(\bo{A}, \ \bo{B})$ is controllable.
+		\end{block}
+		
+		\begin{itemize}
+			\item If $\lambda$ is not an eigenvalue of $\bo{A}$, then $\text{det}(\bo{A}-\lambda\bo{I}) \neq 0$ and the matrix has full row rank.
+			
+			\item If $\text{det}(\bo{A}-\lambda\bo{I}) = 0$ and $\mathcal{V} = \text{null}(\bo{A}-\lambda\bo{I})$, $\text{dim}(\mathcal{V}) = 1$ and $\bo{v} \in \mathcal{V}$ , meaning $\lambda, \ \bo{v}$ are eigenvalue and eigenvector of $\bo{A}$, then in order for the criterion to hold the columns fo $\bo{B}$ should not all be orthogonal to $\bo{v}$: $\bo{v}\T \bo{B} \neq 0$.
+			
+			\item If eigenspace $\mathcal{V}$ is $k$-dimensional, the projection of $\bo{B}$ onto that eigenspace should also be $k$-dimensional.
+			
+		\end{itemize}
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Read more}
+	
+	\begin{itemize}
+		
+		\item Controllability and Observability (Rutgers University) \bref{https://www.ece.rutgers.edu/~gajic/psfiles/chap5.pdf}{https://www.ece.rutgers.edu/~gajic/psfiles/chap5.pdf}
+		
+	\end{itemize}
+	
+\end{frame}
+
+\myqrframe
+
+
+\begin{frame}
+	
+	\centering{\huge Appendix A: Analytical solution (recap)}
+	
+\end{frame}
+
+
+
+\begin{frame}{Matrix exponential}
+	% \framesubtitle{Limited control}
+	\begin{flushleft}
+		
+		Exponential $e^a$ is defined as a series:
+		
+		\begin{equation}
+			e^a =1+a+\frac{1}{2} a^2
+			+\frac{1}{6} a^3 + ... = \sum_{n=0}^{\infty} \frac{1}{n!} a^n
+		\end{equation}
+		
+		Matrix exponential $e^\bo{A}$ is defined as a series:
+		
+		\begin{equation}
+			e^\bo{A} = \bo{I}+\bo{A}+\frac{1}{2} \bo{A}\bo{A}
+			+\frac{1}{6} \bo{A}\bo{A}\bo{A} + ... = \sum_{n=0}^{\infty} \frac{1}{n!} \bo{A}^n
+		\end{equation}
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Analytical solution to ODE}
+	% \framesubtitle{Limited control}
+	\begin{flushleft}
+		
+		An ODE of the form $\dot x = a x$ has analytical solution $x(t) = e^{at} x(0)$.
+		
+		\bigskip
+		
+		An ODE of the form $\dot{\bo{x}} = \bo{A}  \bo{x}$ has analytical solution $\bo{x}(t) = e^{\bo{A}t}  \bo{x}(0)$.
+		
+		\bigskip
+		
+		Let us check that this is a solution:
+		
+		\begin{align}
+			\bo{x}(t) &= \left( \bo{I}+\bo{A}t+\frac{1}{2} \bo{A}\bo{A}t^2
+			+\frac{1}{6} \bo{A}\bo{A}\bo{A}t^3 + ... \right)  \bo{x}(0) &
+			\\
+			\dot{\bo{x}}(t) &= \left( \bo{A}+\bo{A}\bo{A}t
+			+\frac{1}{2}\bo{A}\bo{A}\bo{A}t^2 + ... \right)  \bo{x}(0) 	&		
+			\\
+			\dot{\bo{x}}(t) &= \bo{A} \left(\bo{I} +\bo{A}t
+			+\frac{1}{2}\bo{A}\bo{A}t^2 + ... \right)  \bo{x}(0) 	&		
+			\\
+			\dot{\bo{x}}(t) &= \bo{A} e^{\bo{A}t}  \bo{x}(0) 	&		 			
+			\\
+			\dot{\bo{x}}(t) &= \bo{A} \bo{x}(t)  &\ \ \qed
+		\end{align}
+		
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Forced State Response (LTI) (1)}
+	% \framesubtitle{Limited control}
+	\begin{flushleft}
+		
+		An ODE of the form $\dot x = a x + bu(t)$ also has analytical solution. To find it, we first find the following derivative:
+		%
+		\begin{equation}
+			\frac{d}{dt} \left( e^{-at} x(t) \right) = e^{-at} \dot x(t) - a e^{-at} x(t)
+		\end{equation}
+		
+		Multiplying $\dot x = a x + bu(t)$ by $e^{-at}$ we see:
+		
+		\begin{align}
+			e^{-at} \dot x = e^{-at} a x + e^{-at} bu(t)
+			\\
+			e^{-at} \dot x -  e^{-at} a x= e^{-at} bu(t)
+			\\
+			\frac{d}{dt} \left( e^{-at} x(t) \right) = e^{-at} bu(t)
+			\\
+			\int_{0}^{t} \frac{d}{d\tau} \left( e^{-a\tau} x(\tau) \right) d\tau = 	\int_{0}^{t}  e^{-a\tau} bu(\tau) d\tau
+		\end{align}
+		
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Forced State Response (LTI) (2)}
+	% \framesubtitle{Limited control}
+	\begin{flushleft}
+		
+		Continuing the derivation:
+		
+		\begin{align}
+			\int_{0}^{t} \frac{d}{d\tau} \left( e^{-a\tau} x(\tau) \right) d\tau = 	\int_{0}^{t}  e^{-a\tau} bu(\tau) d\tau
+			\\
+			e^{-at} x(t) - x(0) = \int_{0}^{t}  e^{-a\tau} bu(\tau) d\tau
+			\\
+			x(t) = e^{at} x(0) + e^{at} \int_{0}^{t}  e^{-a\tau} bu(\tau) d\tau
+			\\
+			x(t) = e^{at} x(0) + \int_{0}^{t}  e^{a(t-\tau)} bu(\tau) d\tau
+		\end{align}
+		
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Forced State Response (LTI) (3)}
+	% \framesubtitle{Limited control}
+	\begin{flushleft}
+		
+		State-space equation $\dot{\bo{x}} = \bo{A}  \bo{x} + \bo{B}  \bo{u}(t)$ also has an analytical solution:
+		
+		\begin{equation}
+			\bo{x}(t) = e^{\bo{A}t}  \bo{x}(0) + 
+			\int_{0}^{t} e^{\bo{A}(t-\tau)} \bo{B}  \bo{u}(\tau) d\tau
+		\end{equation}
+		
+		The same can be re-written as:
+		
+		\begin{equation}
+			\bo{x}(t) = e^{\bo{A}t}  \bo{x}(0) + 
+			e^{\bo{A}t} \int_{0}^{t} e^{-\bo{A}\tau} \bo{B}  \bo{u}(\tau) d\tau
+		\end{equation}
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+
+\end{document}

@@ -1,0 +1,865 @@
+\documentclass{beamer}
+
+\input{settings.tex}
+
+
+\title{Kalman Filter}
+\subtitle{Control Theory, Lecture 10}
+\author{by Sergei Savin}
+\centering
+\date{\mydate}
+
+
+
+\begin{document}
+\maketitle
+
+
+
+\begin{frame}{Content}
+\begin{itemize}
+\item Random variables, mean, autocovariance
+\item Models with uncertainty, observer
+\begin{itemize}
+	\item Process noise, measurement noise
+	\item Open loop observer
+	\item Estimation error autocovariance propagation
+	\item Kalman filter
+\end{itemize}
+\item Kalman filter gain
+\end{itemize}
+\end{frame}
+
+
+
+
+\begin{frame}{Random variable, 1}
+%\framesubtitle{How do we know the state?}
+\begin{flushleft}
+
+We can think of a \emph{random variable} $\bo{v}$ as a sequence of values $\bo{v}_1$, $\bo{v}_2$, $\bo{v}_3$, ... - sampled from a distribution.
+
+\bigskip
+
+Mean $\bar{\bo{v}}$ of a random variable $\bo{v}$ is denoted as:
+
+\begin{equation}
+	\bar{\bo{v}} = E[\bo{v}]
+\end{equation}
+%\begin{equation}
+%	\bar{\bo{v}} = \underset{N \rightarrow \infty}{\text{lim}} \left( \frac{1}{N} \sum_{i = 1}^{N} \bo{v}_i \right)
+%\end{equation}
+
+Mean has a number of properties:
+
+\begin{align}
+	E[\bo{a}] &= \bo{a}, & \bo{a}= \text{const} \\
+	E[\bo{x}+\bo{y}] &= E[\bo{x}] + E[\bo{y}] &\\
+	E[\alpha \bo{x}] &= \alpha  E[\bo{x}]  & \alpha = \text{const}\\
+	E[\bo{A} \bo{x}] &= \bo{A}  E[\bo{x}] & \bo{A} = \text{const}
+\end{align}
+
+
+\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Random variable, 2}
+	%\framesubtitle{How do we know the state?}
+	\begin{flushleft}
+		
+		Autocovariance $\bo{V} = \textbf{cov}(\bo{v}, \bo{v})$ of a random variable $\bo{v}$ is defined as:
+		
+		\begin{equation}
+			\textbf{cov}(\bo{v}, \bo{v}) = E[(\bo{v} - E[\bo{v}])(\bo{v} - E[\bo{v}])\T]
+		\end{equation}
+	
+		To simplify notation in the following sections, we define $\textbf{cov}(\bo{v}) = \textbf{cov}(\bo{v}, \bo{v})$. For zero-mean process $E[\bo{v}] = 0$ the formula simplifies:
+		
+		\begin{equation}
+			\textbf{cov}(\bo{v}) = E[\bo{v}\bo{v}\T]
+		\end{equation}
+		
+		Autocovariance has a number of properties:
+		
+		\begin{align}
+			\textbf{cov}(\bo{a}) &= \bo{0}, & \bo{a}= \text{const} 
+			\\
+			\textbf{cov}(\bo{x}+\bo{a}) &= \textbf{cov}(\bo{x}), & \bo{a}= \text{const} 
+			\\
+			\textbf{cov}(\alpha \bo{x}) &= \alpha^2 \ \textbf{cov}(\bo{x}) &
+		\end{align}
+		
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Random variable, 3}
+	%\framesubtitle{How do we know the state?}
+	\begin{flushleft}
+		
+		A random variable $\bo{x}$ with Gaussian distribution can be fully described via its mean $\bar{\bo{x}}$ and covariance $\bo{X}$:
+		
+		\begin{equation}
+			\bo{x} \sim \mathcal{N} (\bar{\bo{x}}, \bo{X})
+		\end{equation}
+	
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Mean of a linear transform}
+	%\framesubtitle{How do we know the state?}
+	\begin{flushleft}
+		
+		Let $\bo{x}$ be a random variable $\bo{x} \sim \mathcal{N} (\bar{\bo{x}}, \bo{X})$.  Given a constant matrix $\bo{M}$ we can define an affine transformation of $\bo{x}$:
+		
+		\begin{equation}
+			\bo{y} = \bo{M}\bo{x}
+		\end{equation}
+		
+		We can find mean of $\bo{y}$:
+		%
+		\begin{align}
+			E[\bo{y}] = E[\bo{M}\bo{x}] \\
+			E[\bo{y}] = \bo{M}E[\bo{x}] \\
+			E[\bo{y}] = \bo{M}\bar{\bo{x}}
+		\end{align}
+		
+		If $\bar{\bo{x}} = E[\bo{x}] = 0$, then $\bar{\bo{y}} = E[\bo{y}] = 0$.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Autocovariance over linear transform}
+	%\framesubtitle{How do we know the state?}
+	\begin{flushleft}
+		
+		Assuming $\bar{\bo{x}} = E[\bo{x}] = 0$, we get $E[\bo{y}] = 0$; with that we can find autocovariance of $\bo{y}$:
+		%
+		\begin{align*}
+			\textbf{cov}(\bo{y}) &= E[(\bo{y} - E[\bo{y}])(\bo{y} - E[\bo{y}])\T] =
+			\\
+			&=E[\bo{y}\bo{y}\T] =
+			\\
+			&=E[(\bo{M}\bo{x})(\bo{M}\bo{x})\T]=
+			\\
+			&=E[\bo{M}\bo{x}\bo{x}\T \bo{M}\T]=
+			\\
+			&=\bo{M}\bo{X} \bo{M}\T
+		\end{align*}
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+%\begin{frame}{Autocovariance over linear transform}
+%	%\framesubtitle{How do we know the state?}
+%	\begin{flushleft}
+%		
+%		Without this assumption, the covariance of $\bo{y}$ is a little more complicated:
+%		%
+%		\begin{align*}
+%			\textbf{cov}(\bo{y}) = E[(\bo{y} - E[\bo{y}])(\bo{y} - E[\bo{y}])\T] =
+%			\\
+%			= E[\bo{y}\bo{y}\T
+%			+ E[\bo{y}]E[\bo{y}]\T
+%			- \bo{y}E[\bo{y}]\T
+%			- E[\bo{y}]\bo{y}\T] =
+%			\\
+%			=
+%			E[\bo{y}\bo{y}\T
+%			+ \bar{\bo{y}}\bar{\bo{y}}\T
+%			- \bo{y}\bar{\bo{y}}\T
+%			- \bar{\bo{y}}\bo{y}]\T]=
+%			\\
+%			=
+%			E[\bo{y}\bo{y}\T]
+%			+ \bar{\bo{y}}\bar{\bo{y}}\T
+%			- E[\bo{y}]\bar{\bo{y}}\T
+%			- \bar{\bo{y}}E[\bo{y}]\T=
+%			\\
+%			=
+%			E[\bo{y}\bo{y}\T]
+%			+ \bar{\bo{y}}\bar{\bo{y}}\T
+%			- \bar{\bo{y}}\bar{\bo{y}}\T
+%			- \bar{\bo{y}}\bar{\bo{y}}\T=
+%			\\
+%			=
+%			E[(\bo{M}\bo{x})(\bo{M}\bo{x})\T]
+%			- (\bo{M}\bar{\bo{x}})(\bo{M}\bar{\bo{x}})\T
+%			\\
+%			=
+%			E[\bo{M}\bo{x}\bo{x}\T \bo{M}\T]
+%			- (\bo{M}\bar{\bo{x}}\bar{\bo{x}}\T\bo{M}\T)=
+%			\\
+%			=
+%			\bo{M}\bo{X} \bo{M}\T
+%			- (\bo{M}\bar{\bo{x}}\bar{\bo{x}}\T\bo{M}\T)=
+%			\\
+%			=
+%			\bo{M}\bo{X} \bo{M}\T
+%			- \bo{M}\bar{\bo{x}}\bar{\bo{x}}\T\bo{M}\T
+%		\end{align*}
+%		
+%	\end{flushleft}
+%\end{frame}
+
+
+
+
+
+\begin{frame}{State estimation error - dynamics}
+	%\framesubtitle{How do we know the state?}
+	\begin{flushleft}
+		
+		Assume the DT-LTI dynamics takes the form:
+		
+		\begin{equation}
+			\bo{x}_{i+1} = \bo{A} \bo{x}_i + \bo{B} \bo{u}_i + \bo{w}_i,
+		\end{equation}
+		
+		where $\bo{w} \sim \mathcal{N} (0, \bo{Q})$ is \emph{process noise} - random input with Gaussian distribution and $\bo{Q} \succeq 0$ (meaning that it is positive semidefinite). We can propose an open-loop observer:
+		
+		\begin{equation}
+			\bhat{x}_{i+1} = \bo{A} \bhat{x}_i + \bo{B} \bo{u}_i, 
+		\end{equation}
+		
+		where $\bhat{x}$ is state estimate. We can find estimation error $\btil{x} = \bo{x}_i - \bhat{x}_i$ dynamic:
+		
+		\begin{equation}
+			\btil{x}_{i+1} = \bo{A} \btil{x}_i + \bo{w}_i
+		\end{equation}
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{State estimation error - mean}
+	%\framesubtitle{How do we know the state?}
+	\begin{flushleft}
+		
+		Assume you could pick your initial state estimate $\bhat{x}_0$ such that your initial state estimation error $\btil{x}_0$ behaves as a random variable sampled from a  Gaussian distribution $\btil{x}_0 \sim \mathcal{N} (0, \bo{P}_0)$.
+		
+		\bigskip
+		
+		Knowing mean $E[\btil{x}_i]$ we can compute $E[\btil{x}_{i+1}]$:
+		
+		\begin{equation}
+			E[\btil{x}_{i+1}] = E[\bo{A} \btil{x}_i + \bo{w}_i] = 
+			\bo{A} E[\btil{x}_i]
+		\end{equation}		
+	
+		Since $E[\btil{x}_0] = 0$, we can conclude that $E[\btil{x}_i] = 0, \ \forall i$.
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{State estimation error - covariance}
+	%\framesubtitle{How do we know the state?}
+	\begin{flushleft}
+		
+		Knowing autocovariance $\bo{P}_i$ we can compute $\bo{P}_{i+1}$:
+		
+		\begin{align*}
+			\bo{P}_{i+1} &= E[\btil{x}_{i+1}\btil{x}_{i+1}\T] = 
+			E[(\bo{A} \btil{x}_i + \bo{w}_i) (\bo{A} \btil{x}_i + \bo{w}_i)\T] = 
+			\\
+			&=
+			E[\bo{A} \btil{x}_i \btil{x}_i\T \bo{A}\T +
+			\bo{A} \btil{x}_i \bo{w}_i\T + 
+			\bo{w}_i \btil{x}_i\T \bo{A}\T +
+			\bo{w}_i \bo{w}_i\T]
+		\end{align*}
+		
+		We can assume that random process $\bo{w}$ is uncorrelated with $\btil{x}$, meaning that $E[\btil{x}_i \bo{w}_i\T] = E[\bo{w}_i \btil{x}_i\T] = 0$:
+		
+		\begin{align*}
+			\bo{P}_{i+1} 
+			&=
+			E[\bo{A} \btil{x}_i \btil{x}_i\T \bo{A}\T +
+			\bo{w}_i \bo{w}_i\T] 
+			= 
+			\bo{A} \bo{P}_i \bo{A}\T +
+			\bo{Q}
+		\end{align*}
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Closed-loop observer, 1}
+	%\framesubtitle{How do we know the state?}
+	\begin{flushleft}
+		
+		Previously, we computed dynamics of mean and covariance of state estimation error for the case of open-loop observer. But, a stable observer with feedback is obviously preferable. We start by introducing a measurement model:
+		
+		\begin{equation}
+			\bo{y}_i = \bo{H} \bo{x}_i + \bo{v}_i
+		\end{equation}
+		
+		where $\bo{H}$ is a measurement matrix, $\bo{y}_i$ is measured output and $\bo{v}_i$ is a measurement noise sampled from a Gaussian distribution $\bo{v}_i \sim \mathcal{N} (0, \bo{R})$, where $\bo{R} \succ 0$.
+		
+	\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Closed-loop observer, 2}
+	%\framesubtitle{How do we know the state?}
+	\begin{flushleft}
+		
+		
+		We can propose the following modification to the observer:
+		
+		\begin{equation}
+			\label{eq:observer}
+			\begin{cases}
+				\bhat{x}_{i+1}^- = \bo{A} \bhat{x}_i + \bo{B} \bo{u}_i, \\
+				\bhat{x}_{i+1} = \bhat{x}_{i+1}^- + \bo{L}_i (\bo{y}_i - \bo{H} \bhat{x}_{i+1}^-)
+			\end{cases}
+		\end{equation}
+		
+		where $\bhat{x}_{i+1}^-$ is an \emph{a priori} estimate. \textcolor{mygray2}{We can re-write the last equation as 
+			$\bhat{x}_{i+1} = \bhat{x}_{i+1}^- + \bo{L}_i (\bo{H} \bo{x}_i - \bo{H} \bhat{x}_{i+1}^- + \bo{v}_i) $.} 
+		
+		\bigskip
+		
+		We can re-write all this in terms of state estimation error, defining $\btil{x}_{i+1}^- = \bo{x}_{i+1} - \bhat{x}_{i+1}^-$. For the last eq. in \eqref{eq:observer}, we subtract $\bo{x}_{i+1}$ from both sides:
+		%
+		\begin{equation}
+		\bhat{x}_{i+1}-\bo{x}_{i+1} = \bhat{x}_{i+1}^- - \bo{x}_{i+1} + 
+		\bo{L}_i (\bo{H} \bo{x}_i - \bo{H} \bhat{x}_{i+1}^- + \bo{v}_i) 
+		\end{equation}				
+		%
+		 and flip the sign:
+		
+		\begin{equation}
+	\begin{cases}
+		\btil{x}_{i+1}^- = \bo{A} \btil{x}_i + \bo{w}_i, \\
+		\btil{x}_{i+1} = (\bo{I} - \bo{L}_i \bo{H}) \btil{x}_{i+1}^- + \bo{L}_i\bo{v}_i
+	\end{cases}
+		\end{equation}		
+	
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Closed-loop observer - mean dynamics}
+	%\framesubtitle{How do we know the state?}
+	\begin{flushleft}
+		
+		We can compute estimation error mean dynamics (\emph{propagation}):
+		%
+				\begin{align*}
+		E[\btil{x}_{i+1}^-] = 
+		E[\bo{A} \btil{x}_i + \bo{w}_i] = 
+		E[\bo{A} \btil{x}_i] + E[\bo{w}_i]  =
+		\bo{A}E[\btil{x}_i].
+				\end{align*}	
+		%
+				\begin{align*}
+		E[\btil{x}_{i+1}] = 
+		E[(\bo{I} - \bo{L}_i \bo{H}) \btil{x}_{i+1}^- + \bo{L}_i\bo{v}_i] =\\
+		=E[(\bo{I} - \bo{L}_i \bo{H}) \btil{x}_{i+1}^-]
+		= 
+		(\bo{I} - \bo{L}_i \bo{H}) E[\btil{x}_{i+1}^-]
+				\end{align*}				
+		
+		So, we obtain the following mean dynamics:
+		
+				\begin{equation}
+						\begin{cases}
+								E[\btil{x}_{i+1}^-] = \bo{A} E[\btil{x}_i], \\
+								E[\btil{x}_{i+1}] = (\bo{I} - \bo{L}_i \bo{H}) E[\btil{x}_{i+1}^-]
+							\end{cases}
+					\end{equation}		
+		
+		Since $E[\btil{x}_0] = 0$, then $E[\btil{x}_1^-] = 0$, and then $E[\btil{x}_1] = 0$, and the same for $E[\btil{x}_i] = 0$, $E[\btil{x}_i^-] = 0$.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Closed-loop observer - covariance dynamics}
+	%\framesubtitle{How do we know the state?}
+	\begin{flushleft}
+		
+		We can compute autocovariance dynamics (propagation). Below is \emph{a priori} estimation error covariance:
+		%
+		\begin{align*}
+				\bo{P}_{i+1}^- 
+				&= E[\btil{x}_{i+1}^- (\btil{x}_{i+1}^-)\T] = \\
+				&= E[ (\bo{A} \btil{x}_i + \bo{w}_i) (\bo{A} \btil{x}_i + \bo{w}_i)\T] = \\
+				&= \bo{A} \bo{P}_i \bo{A}\T +\bo{Q}.
+		\end{align*}		
+	
+		\bigskip
+	
+		\textcolor{mydarkgray}{Reminder: $E[\bo{w}_i \bo{w}_i\T] = \bo{Q}$ since $\bo{w} \sim \mathcal{N} (0, \bo{Q})$, $E[\btil{x}_i \bo{w}_i\T] = 0$ since the two variables are independent, and $E[\btil{x}_i \btil{x}_i\T] = \bo{P}_i$ by definition.}
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+
+\begin{frame}{Closed-loop observer - covariance dynamics}
+	%\framesubtitle{How do we know the state?}
+	\begin{flushleft}
+		
+		
+		With that, we can find \emph{a posteriori} estimation error covariance:
+		%
+		\begin{align*}
+			E[\btil{x}_{i+1} \btil{x}_{i+1}\T] 
+			=
+			E[ (\bo{I} - \bo{L}_i \bo{H}) \btil{x}_{i+1}^- (\btil{x}_{i+1}^-)\T (\bo{I} - \bo{L}_i \bo{H})\T + \\
+			+(\bo{I} - \bo{L}_i \bo{H}) \btil{x}_{i+1}^- \bo{v}_i\T +
+			\bo{v}_i (\btil{x}_{i+1}^-)\T (\bo{I} - \bo{L}_i \bo{H})\T +
+			\bo{L}_i \bo{v}_i \bo{v}_i\T \bo{L}_i\T]
+		\end{align*}
+		
+		Assuming that $\btil{x}_{i+1}^-$ and $\bo{v}_i$ are uncorrelated, we get $E[(\bo{I} - \bo{L}_i \bo{H}) \btil{x}_{i+1}^- \bo{v}_i\T] = 0$ and $E[\bo{v}_i (\btil{x}_{i+1}^-)\T (\bo{I} - \bo{L}_i \bo{H})\T] = 0$. With that we simplify:
+		%
+		\begin{align*}
+			E[\btil{x}_{i+1} \btil{x}_{i+1}\T] 
+			&=
+			(\bo{I} - \bo{L}_i \bo{H}) \bo{P}_{i+1}^- (\bo{I} - \bo{L}_i \bo{H})\T +\bo{L}_i\bo{R}\bo{L}_i\T = \bo{P}_{i+1}
+		\end{align*}
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+
+
+\begin{frame}
+	%\framesubtitle{How do we know the state?}
+	\begin{flushleft}
+		
+		\centering{\Huge Kalman filter gain}
+		
+	\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Preliminaries, 1}
+	%\framesubtitle{How do we know the state?}
+	\begin{flushleft}
+		
+		Before discussing how we can propose Kalman filter gain, we need two mathematical facts. First, inner and outer product:
+		
+		\begin{equation}
+			\bo{x}\T \bo{x} = \text{tr}(\bo{x}\bo{x}\T)
+		\end{equation}
+	%
+		where $\text{tr}(\cdot)$ is a trace operation.
+	
+	\bigskip
+	
+		Example:
+	%
+		\begin{align*}
+			\bo{x} = 
+			\begin{bmatrix}
+				x_1 \\ x_2 \\ x_3
+			\end{bmatrix},& 
+		\ \ \ 
+		\bo{x}\T \bo{x} = x_1^2+x_2^2+x_3^2, 
+		\\
+		\bo{x}\bo{x}\T = 
+		\begin{bmatrix}
+			x_1^2    & x_1 x_2 & x_1 x_3 \\ 
+			x_2 x_1 & x_2^2    & x_2 x_3 \\ 
+			x_3 x_1 & x_3 x_2 & x_3^2
+		\end{bmatrix},& 
+	\ \ \
+	\text{tr}(\bo{x}\bo{x}\T)  = x_1^2+x_2^2+x_3^2.
+		\end{align*}	
+	
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Preliminaries, 2}
+	%\framesubtitle{How do we know the state?}
+	\begin{flushleft}
+		
+		Second, derivatives of a trace:
+		%
+		\begin{align}
+			\frac{\partial ( \text{tr}(\bo{A} \bo{X}) )}{\partial \bo{X}} = 
+			\frac{\partial ( \text{tr}(\bo{X}\bo{A}) )}{\partial \bo{X}} 
+			&= 
+			\bo{A}
+			\\
+			\frac{\partial ( \text{tr}(\bo{A} \bo{X}\T) )}{\partial \bo{X}} = 
+			\frac{\partial ( \text{tr}(\bo{X}\T\bo{A}) )}{\partial \bo{X}} 
+			&= 
+			\bo{A}\T	
+			\\
+			\frac{\partial ( \text{tr}(\bo{A} \bo{X}) )}{\partial \bo{X}\T} = 
+			\frac{\partial ( \text{tr}(\bo{X}\bo{A}) )}{\partial \bo{X}\T} 
+			&= 
+			\bo{A}\T		
+		\end{align}
+	
+		\begin{align}
+			\frac{\partial ( \text{tr}(\bo{X}\T \bo{A} \bo{X}) )}{\partial \bo{X}} 
+			&=
+			 \bo{X}\T (\bo{A} + \bo{A}\T)
+			 \\
+			 \frac{\partial ( \text{tr}(\bo{X} \bo{A} \bo{X}\T) )}{\partial \bo{X}} 
+			 &=
+			  (\bo{A} + \bo{A}\T) \bo{X}\T
+			 \\
+			 \frac{\partial ( \text{tr}(\bo{X}\T \bo{A} \bo{X}) )}{\partial \bo{X}\T} 
+			 &=
+			 (\bo{A} + \bo{A}\T) \bo{X}
+			 \\
+			 \frac{\partial ( \text{tr}(\bo{X} \bo{A} \bo{X}\T) )}{\partial \bo{X}\T} 
+			 &=
+			 \bo{X}(\bo{A} + \bo{A}\T)
+		\end{align}
+		
+			
+		
+	\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Kalman gain, 1}
+	%\framesubtitle{How do we know the state?}
+	\begin{flushleft}
+		
+		Here we will attempt to derive optimal Kalman gain $\bo{L}_i$ for the $i$-th step, such that the following cost function is minimized:
+		
+		\begin{equation}
+			J = E \left[ \sum \Tilde x_{i+1}^2  \right]
+		\end{equation}
+	%
+		meaning that we minimize mean value of the square of the estimation error. We also know that as long as estimation error on the $i+1$-th step has zero mean (as a random variable), covariance takes the following form: $\bo{P}_{i+1} = E [ \btil{x}_{i+1} \btil{x}_{i+1}\T ]$. Its trace gives us the cost function $J$:
+		
+		\begin{align*}
+			J = E \left[ \text{tr}(\bo{P}_{i+1})  \right] =
+			\text{tr} (E \left[ \bo{P}_{i+1}  \right]) = \\
+			= \text{tr}(
+			(\bo{I} - \bo{L}_i \bo{H}) \bo{P}_{i+1}^- (\bo{I} - \bo{L}_i \bo{H})\T +\bo{L}_i\bo{R}\bo{L}_i\T
+			) = \\
+			\text{tr}(
+			\bo{P}_{i+1}^- - \bo{L}_i \bo{H} \bo{P}_{i+1}^- 
+			- \bo{P}_{i+1}^- \bo{H}\T \bo{L}_i\T
+			+ \bo{L}_i (\bo{H}\bo{P}_{i+1}^- \bo{H}\T + \bo{R}) \bo{L}_i\T
+			)
+		\end{align*}		
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Kalman gain, 2}
+	%\framesubtitle{How do we know the state?}
+	\begin{flushleft}
+		
+		Next, we find derivative of $J$ with respect to $\bo{L}_i$ and set it to zero:
+		
+		\begin{align*}
+			\frac{\partial J}{\partial \bo{L}_i} 
+			= 
+			-\bo{H} \bo{P}_{i+1}^- -(\bo{P}_{i+1}^- \bo{H}\T)\T + 
+			2(\bo{H}\bo{P}_{i+1}^- \bo{H}\T + \bo{R}) \bo{L}_i\T = 0
+			\\
+			-2 \bo{H} \bo{P}_{i+1}^- + 2(\bo{H}\bo{P}_{i+1}^- \bo{H}\T + \bo{R}) \bo{L}_i\T = 0
+			\\
+			\bo{L}_i (\bo{H}\bo{P}_{i+1}^- \bo{H}\T + \bo{R}) = \bo{P}_{i+1}^- \bo{H}\T
+			\\
+			\bo{L}_i = \bo{P}_{i+1}^- \bo{H}\T (\bo{H}\bo{P}_{i+1}^- \bo{H}\T + \bo{R})^{-1}
+		\end{align*}		
+		
+		
+So, the Kalman gain can be optimally chosen as $\bo{L}_i = \bo{P}_{i+1}^- \bo{H}\T (\bo{H}\bo{P}_{i+1}^- \bo{H}\T + \bo{R})^{-1}$.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+
+
+\begin{frame}{Kalman gain, 3}
+	%\framesubtitle{How do we know the state?}
+	\begin{flushleft}
+		
+		There are alternative but equivalent ways to pick $\bo{L}_i$. We can do it "the same way" as we did with LQR:
+		
+		\begin{equation}
+			\bo{L}_i = \bo{P}_{i+1} \bo{H}\T \bo{R}^{-1}
+		\end{equation}
+		
+		The equivalence of this formula to the earlier one will be shown in the Appendix B.
+		
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{Further reading}
+	%\framesubtitle{How do we know the state?}
+	\begin{flushleft}
+		
+		\begin{itemize}
+			\item Simon, D., 2006. Optimal state estimation: Kalman, H infinity, and nonlinear approaches. John Wiley \& Sons.
+		\end{itemize}
+		
+	\end{flushleft}
+\end{frame}
+
+
+\myqrframe
+
+
+
+\begin{frame}
+	%\framesubtitle{How do we know the state?}
+	\begin{flushleft}
+		
+		\centering{\Huge Appendix A}
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{Mean of an affine transform}
+	%\framesubtitle{How do we know the state?}
+	\begin{flushleft}
+		
+		Given a constant vector $\bo{c}$ and a constant matrix $\bo{M}$ we can define an affine transformation of $\bo{x}$:
+		
+		\begin{equation}
+			\bo{y} = \bo{M}\bo{x} + \bo{c}
+		\end{equation}
+		
+		We can find mean of $\bo{y}$:
+		%
+		\begin{align}
+			E[\bo{y}] = E[\bo{M}\bo{x} + \bo{c}] \\
+			E[\bo{y}] = \bo{M}E[\bo{x}] + \bo{c} \\
+			E[\bo{y}] = \bo{M}\bar{\bo{x}} + \bo{c}
+		\end{align}
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Autocovariance with zero mean}
+	%\framesubtitle{How do we know the state?}
+	\begin{flushleft}
+		
+		Assuming $E[\bo{x}] = 0$, we can find covariance of $\bo{y}$:
+		%
+		\begin{align*}
+			\textbf{cov}(\bo{y}) = E[(\bo{y} - E[\bo{y}])(\bo{y} - E[\bo{y}])\T] =
+			\\
+			= E[\bo{y}\bo{y}\T
+			+ E[\bo{y}]E[\bo{y}]\T
+			- \bo{y}E[\bo{y}]\T
+			- E[\bo{y}]\bo{y}\T] =
+			\\
+			=
+			E[\bo{y}\bo{y}\T
+			+ \bar{\bo{y}}\bar{\bo{y}}\T
+			- \bo{y}\bar{\bo{y}}\T
+			- \bar{\bo{y}}\bo{y}]\T]=
+			\\
+			=
+			E[\bo{y}\bo{y}\T]
+			+ \bar{\bo{y}}\bar{\bo{y}}\T
+			- E[\bo{y}]\bar{\bo{y}}\T
+			- \bar{\bo{y}}E[\bo{y}]\T=
+			\\
+			=
+			E[\bo{y}\bo{y}\T]
+			+ \bar{\bo{y}}\bar{\bo{y}}\T
+			- \bar{\bo{y}}\bar{\bo{y}}\T
+			- \bar{\bo{y}}\bar{\bo{y}}\T
+			\\
+			=
+			E[(\bo{M}\bo{x} + \bo{c})(\bo{M}\bo{x} + \bo{c})\T]
+			- \bo{c}\bo{c}\T
+			\\
+			=
+			E[\bo{M}\bo{x}\bo{x}\T \bo{M}\T+
+			\bo{c}\bo{c}\T+
+			\bo{M}\bo{x}\bo{c}\T+
+			\bo{c}\bo{x}\T \bo{M}\T]
+			- \bo{c}\bo{c}\T=
+			\\
+			=
+			\bo{M}\bo{X} \bo{M}\T+
+			\bo{M}\bar{\bo{x}}\bo{c}\T+
+			\bo{c}\bar{\bo{x}}\T \bo{M}\T=
+			\\
+			=
+			\bo{M}\bo{X} \bo{M}\T
+		\end{align*}
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{Autocovariance over affine transform}
+	%\framesubtitle{How do we know the state?}
+	\begin{flushleft}
+		
+		Without this assumption, the covariance of $\bo{y}$ is a little more complicated:
+		%
+		\begin{align*}
+			\textbf{cov}(\bo{y}) = E[(\bo{y} - E[\bo{y}])(\bo{y} - E[\bo{y}])\T] =
+			\\
+			= E[\bo{y}\bo{y}\T
+			+ E[\bo{y}]E[\bo{y}]\T
+			- \bo{y}E[\bo{y}]\T
+			- E[\bo{y}]\bo{y}\T] =
+			\\
+			=
+			E[\bo{y}\bo{y}\T
+			+ \bar{\bo{y}}\bar{\bo{y}}\T
+			- \bo{y}\bar{\bo{y}}\T
+			- \bar{\bo{y}}\bo{y}]\T]=
+			\\
+			=
+			E[\bo{y}\bo{y}\T]
+			+ \bar{\bo{y}}\bar{\bo{y}}\T
+			- E[\bo{y}]\bar{\bo{y}}\T
+			- \bar{\bo{y}}E[\bo{y}]\T=
+			\\
+			=
+			E[\bo{y}\bo{y}\T]
+			+ \bar{\bo{y}}\bar{\bo{y}}\T
+			- \bar{\bo{y}}\bar{\bo{y}}\T
+			- \bar{\bo{y}}\bar{\bo{y}}\T
+			\\
+			=
+			E[(\bo{M}\bo{x} + \bo{c})(\bo{M}\bo{x} + \bo{c})\T]
+			- (\bo{M}\bar{\bo{x}} + \bo{c})(\bo{M}\bar{\bo{x}} + \bo{c})\T
+			\\
+			=
+			E[\bo{M}\bo{x}\bo{x}\T \bo{M}\T+
+			\bo{c}\bo{c}\T+
+			\bo{M}\bo{x}\bo{c}\T+
+			\bo{c}\bo{x}\T \bo{M}\T]
+			-\\
+			- (\bo{M}\bar{\bo{x}}\bar{\bo{x}}\T\bo{M}\T +
+			\bo{M}\bar{\bo{x}}\bo{c}\T+
+			\bo{c}\bar{\bo{x}}\T\bo{M}\T+
+			\bo{c}\bo{c}\T)=
+			\\
+			=
+			\bo{M}\bo{X} \bo{M}\T+
+			\bo{c}\bo{c}\T+
+			\bo{M}\bar{\bo{x}}\bo{c}\T+
+			\bo{c}\bar{\bo{x}}\T \bo{M}\T
+			-\\
+			- (\bo{M}\bar{\bo{x}}\bar{\bo{x}}\T\bo{M}\T +
+			\bo{M}\bar{\bo{x}}\bo{c}\T+
+			\bo{c}\bar{\bo{x}}\T\bo{M}\T+
+			\bo{c}\bo{c}\T)=
+			\\
+			=
+			\bo{M}\bo{X} \bo{M}\T
+			- \bo{M}\bar{\bo{x}}\bar{\bo{x}}\T\bo{M}\T
+		\end{align*}
+		
+	\end{flushleft}
+\end{frame}
+
+
+\begin{frame}
+	%\framesubtitle{How do we know the state?}
+	\begin{flushleft}
+		
+		\centering{\Huge Appendix B}
+		
+	\end{flushleft}
+\end{frame}
+
+\begin{frame}{Observer Gain, 1}
+	%\framesubtitle{How do we know the state?}
+	\begin{flushleft}
+		
+		Given observer gain $\bo{L}_i = \bo{P}_{i+1} \bo{H}\T \bo{R}^{-1}$ and autocovariance propagation $ \bo{P}_{i+1} = (\bo{I} - \bo{L}_i \bo{H}) \bo{P}_{i+1}^- (\bo{I} - \bo{L}_i \bo{H})\T +\bo{L}_i\bo{R}\bo{L}_i\T$, we can derive expression for $\bo{L}_i$ as a function of $\bo{P}_{i+1}^-$:
+		%
+		\begin{align}
+			\bo{L}_i \bo{R} = \bo{P}_{i+1} \bo{H}\T 
+			\\
+			\bo{L}_i \bo{R}\bo{L}_i\T = \bo{P}_{i+1} \bo{H}\T \bo{L}_i\T
+			\\
+			\bo{P}_{i+1} = (\bo{I} - \bo{L}_i \bo{H}) \bo{P}_{i+1}^- (\bo{I} - \bo{L}_i \bo{H})\T +\bo{P}_{i+1} \bo{H}\T \bo{L}_i\T
+			\\
+			\bo{P}_{i+1}(\bo{I}- \bo{H}\T \bo{L}_i\T) = (\bo{I} - \bo{L}_i \bo{H}) \bo{P}_{i+1}^- (\bo{I} - \bo{L}_i \bo{H})\T
+		\end{align}
+		
+		Assuming that $\text{det}(\bo{I}- \bo{L}_i \bo{H} )\T \neq 0$, we can multiply on the right by $(\bo{I}- \bo{L}_i \bo{H} )^{-\top}$:
+		%
+		\begin{align}
+	\bo{P}_{i+1} = (\bo{I} - \bo{L}_i \bo{H}) \bo{P}_{i+1}^- 
+		\end{align}		
+		
+	\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Observer Gain, 2}
+	%\framesubtitle{How do we know the state?}
+	\begin{flushleft}
+		
+		\begin{align}
+			\bo{P}_{i+1} &= (\bo{I} - \bo{L}_i \bo{H}) \bo{P}_{i+1}^- 
+			\\
+			\bo{P}_{i+1}\bo{H}\T\bo{R}^{-1} &= (\bo{I} - \bo{L}_i \bo{H}) \bo{P}_{i+1}^- \bo{H}\T\bo{R}^{-1}
+			\\
+			\bo{L}_i &= (\bo{I} - \bo{L}_i \bo{H}) \bo{P}_{i+1}^- \bo{H}\T\bo{R}^{-1}
+			\\
+			\bo{L}_i\bo{R} &= (\bo{I} - \bo{L}_i \bo{H}) \bo{P}_{i+1}^- \bo{H}\T
+			\\
+			\bo{L}_i\bo{R} + \bo{L}_i \bo{H}\bo{P}_{i+1}^- \bo{H}\T &= \bo{P}_{i+1}^- \bo{H}\T 
+			\\
+			\bo{L}_i (\bo{R} + \bo{H}\bo{P}_{i+1}^- \bo{H}\T) &= \bo{P}_{i+1}^- \bo{H}\T 
+			\\
+			\bo{L}_i &= \bo{P}_{i+1}^- \bo{H}\T (\bo{R} + \bo{H}\bo{P}_{i+1}^- \bo{H}\T)^{-1}.  \ \ \ \qed
+		\end{align}		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\end{document}

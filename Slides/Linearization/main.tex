@@ -1,0 +1,434 @@
+\documentclass{beamer}
+
+\input{settings.tex}
+
+
+\title{Linearization}
+\subtitle{Control Theory, Lecture 11}
+\author{by Sergei Savin}
+\centering
+\date{\mydate}
+
+
+
+\begin{document}
+\maketitle
+
+
+\begin{frame}{Content}
+\begin{itemize}
+	\item Taylor expansion
+	\item Linearization
+	\item Linearization of Manipulator equations
+\end{itemize}
+\end{frame}
+
+
+
+
+
+
+\begin{frame}{Taylor expansion around node, 1}
+%	\framesubtitle{Linearization, Taylor Expansion}
+	\begin{flushleft}
+		
+		Consider a non-linear dynamical system:
+		%
+		\begin{equation}
+			\dot{\bo{x}} = \bo{f}(\bo{x}, \bo{u})
+		\end{equation}
+	
+		If $\bo{x}_0$ and $\bo{u}_0$ represent a \emph{node}, i.e. $\bo{f}(\bo{x}_0, \bo{u}_0) = 0$, $\bo{x}_0 = \text{const}$, $\bo{u}_0 = \text{const}$, we can consider a Taylor expansion around that node:
+	
+		\begin{equation}
+			\bo{f}(\bo{x}, \bo{u}) 	\sim 
+			\frac{\partial \bo{f}}{\partial \bo{x}} (\bo{x} - \bo{x}_0) + 
+			\frac{\partial \bo{f}}{\partial \bo{u}} (\bo{u} - \bo{u}_0) + \text{H.O.T.}
+		\end{equation}
+	
+		Where $\bo{x}_0$ and $\bo{u}_0$ are expansion point. We define new variables $\bo{e}$ and $\bo{v}$ as distance from the expansion point:
+		%
+		\begin{align}
+			\bo{e} = \bo{x} - \bo{x}_0, &\ \ \ \dot{\bo{e}} = \dot{\bo{x}}, \\
+			\bo{v} = \bo{u} - \bo{u}_0. &\\
+		\end{align}
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Taylor expansion around node, 2}
+	%	\framesubtitle{Linearization, Taylor Expansion}
+	\begin{flushleft}
+		
+		With that we can re-write the Taylor expansion:
+		%
+		\begin{align}
+			\dot{\bo{e}} = \frac{\partial \bo{f}}{\partial \bo{x}} \bo{e} + 
+			\frac{\partial \bo{f}}{\partial \bo{u}} \bo{v} + \text{H.O.T.}
+		\end{align}		
+	
+		We can introduce notation:
+		
+		\begin{align}
+			\bo{A} = \frac{\partial \bo{f}}{\partial \bo{x}},  \ \ \
+			\bo{B} = \frac{\partial \bo{f}}{\partial \bo{u}}.
+		\end{align}
+		
+		If we drop higher order terms from the Taylor expansion, we obtain \emph{linearization} of the system dynamics:
+		
+		\begin{align}
+			\dot{\bo{e}} = \bo{A} \bo{e} + \bo{B} \bo{v}
+		\end{align}	
+	
+		In this context, $\bo{x}_0$ and $\bo{u}_0$ is the \emph{linearization point}.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Taylor expansion along a trajectory}
+	%	\framesubtitle{Linearization, Taylor Expansion}
+	\begin{flushleft}
+		
+		Consider a non-linear dynamical system:
+		%
+		\begin{equation}
+			\dot{\bo{x}} = \bo{f}(\bo{x}, \bo{u})
+		\end{equation}
+		
+		and a trajectory $\dot{\bo{x}}_0 = \bo{f}(\bo{x}_0, \bo{u}_0)$. We can consider a Taylor expansion along this trajectory:
+		
+		\begin{equation}
+			\bo{f}(\bo{x}, \bo{u}) 	\sim \bo{f}(\bo{x}_0, \bo{u}_0) +
+			\frac{\partial \bo{f}}{\partial \bo{x}} (\bo{x} - \bo{x}_0) + 
+			\frac{\partial \bo{f}}{\partial \bo{u}} (\bo{u} - \bo{u}_0) + \text{H.O.T.}
+		\end{equation}
+		
+		Since $\dot{\bo{e}} = \dot{\bo{x}} - \dot{\bo{x}}_0$, we re-write:
+		%
+		\begin{align}
+			\dot{\bo{e}} \sim 
+			\bo{A} \bo{e} + 
+			\bo{B} \bo{v} + \text{H.O.T.}
+		\end{align}		
+		
+		As before, we drop higher order terms and obtain linearization:
+		
+		\begin{align}
+			\dot{\bo{e}} = 
+			\bo{A} \bo{e} + 
+			\bo{B} \bo{v}
+		\end{align}		
+	
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Affine expansion}
+	%	\framesubtitle{Linearization, Taylor Expansion}
+	\begin{flushleft}
+		
+		If we want to maintain our original variables, we can still use Taylor expansion:
+		
+		\begin{equation}
+			\bo{f}(\bo{x}, \bo{u}) 	\sim \bo{f}(\bo{x}_0, \bo{u}_0) +
+			\bo{A} (\bo{x} - \bo{x}_0) + 
+			\bo{B} (\bo{u} - \bo{u}_0)
+		\end{equation}
+		
+		Denoting $ \bo{f}(\bo{x}_0, \bo{u}_0) - \bo{A}\bo{x}_0 - \bo{B} \bo{u}_0 = \bo{c}$ and dropping H.O.T. we approximate the system as affine:
+		
+		\begin{equation}
+			\dot{\bo{x}} = \bo{A} \bo{x} + 
+			\bo{B} \bo{u} + \bo{c}
+		\end{equation}
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Manipulator equation linearization, 1}
+%\framesubtitle{Idea}
+\begin{flushleft}
+
+Consider Manipulator equation:
+
+\begin{equation}
+	\bo{H} \ddot{\bo{q}} + \bo{C} \dot{\bo{q}} + \bo{g} = \tau
+\end{equation}
+
+We will attempt to linearize it.
+
+\bigskip
+
+We begin by proposing the following new variables:
+
+\begin{align}
+	\bo{x} = 
+	\begin{bmatrix}
+		\bo{q} - \bo{q}_0 \\ 
+		\dot{\bo{q}} - \dot{\bo{q}}_0
+	\end{bmatrix},&  
+\ \ \
+	\bo{u} = \tau - \tau_0
+	\\
+	\bo{q} = \bo{S}_q \bo{x},&  
+	\ \ \
+	\dot{\bo{q}} = \bo{S}_v \bo{x}
+\end{align}
+
+where $\tau_0$ is chosen such that $\bo{C}(\dot{\bo{q}}_0, \bo{q}_0) \dot{\bo{q}}_0 + \bo{g}(\bo{q}_0) = \tau_0$, and $\bo{S}_q$ and $\bo{S}_v$ are choice matrices.
+
+
+\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Manipulator equation linearization, 2}
+%	\framesubtitle{Idea}
+	\begin{flushleft}
+		
+		Next, we introduce function $\phi(\dot{\bo{q}}, \bo{q}, \tau) = \ddot{\bo{q}}$, expressed as:
+		
+		\begin{equation}
+			\phi(\dot{\bo{q}}, \bo{q}, \tau) 
+			=
+			\bo{H}^{-1} (\tau - \bo{C} \dot{\bo{q}} - \bo{g} ) 
+		\end{equation}
+		
+		Next, we write our dynamics as a first order ODE:
+		
+		\begin{equation}
+			\frac{d}{dt} 
+			\left(
+			\begin{bmatrix}
+				\bo{q} \\ \dot{\bo{q}} 
+			\end{bmatrix}
+			\right)
+			=
+			\begin{bmatrix}
+				\dot{\bo{q}}  \\ 
+				\phi(\dot{\bo{q}}, \bo{q}, \tau) 
+			\end{bmatrix}
+		\end{equation}
+	
+	\begin{equation}
+	\dot{\bo{x}} 
+	=
+	\begin{bmatrix}
+		\bo{S}_v \bo{x}  \\ 
+		\phi(\bo{x}, \tau) 
+	\end{bmatrix}
+\end{equation}
+		
+		With that, we can find matrices $\bo{A}$ and $\bo{B}$.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Manipulator equation linearization, 3}
+%\framesubtitle{State matrix}
+\begin{flushleft}
+
+In this case, state matrices $\bo{A}$ and $\bo{B}$ become:
+
+
+\begin{equation}
+	\bo{A} = 
+	\begin{bmatrix}
+		\frac{\partial \dot{\bo{q}}}{\partial \bo{q}}  & 
+		\frac{\partial \dot{\bo{q}}}{\partial \dot{\bo{q}}}
+		 \\
+		 \frac{\partial \phi}{\partial \bo{q}}  & 
+		 \frac{\partial \phi}{\partial \dot{\bo{q}}}
+	\end{bmatrix}
+=
+	\begin{bmatrix}
+	0 & \bo{I}
+	\\
+	\frac{\partial \phi}{\partial \bo{q}}  & 
+	\frac{\partial \phi}{\partial \dot{\bo{q}}}
+\end{bmatrix}
+\end{equation}
+
+
+\begin{equation}
+	\bo{B} = 
+	\begin{bmatrix}
+		\frac{\partial \dot{\bo{q}}}{\partial \tau} 
+		\\
+		\frac{\partial \phi}{\partial \tau} 
+	\end{bmatrix}
+	=
+	\begin{bmatrix}
+		0
+		\\
+		\bo{H}^{-1}
+	\end{bmatrix}
+\end{equation}
+
+Thus. our task is to find the following jacobians: $\frac{\partial \phi}{\partial \bo{q}}$ and $\frac{\partial \phi}{\partial \dot{\bo{q}}}$.
+
+\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Manipulator equation linearization, 4}
+	%\framesubtitle{State matrix}
+	\begin{flushleft}
+		
+		Let us find $\frac{\partial \phi}{\partial \bo{q}}$:
+		
+		\begin{align}
+			\frac{\partial \phi}{\partial \bo{q}}
+			&=
+			\frac{\partial }{\partial \bo{q}} \left(\bo{H}^{-1} (\tau - \bo{C} \dot{\bo{q}} - \bo{g} ) \right)
+			= \\
+			&=
+			\frac{\partial \bo{H}^{-1}}{\partial \bo{q}} (\tau - \bo{C} \dot{\bo{q}} - \bo{g} )
+			+
+			\bo{H}^{-1} \frac{\partial }{\partial \bo{q}} \left( \tau - \bo{C} \dot{\bo{q}} - \bo{g} \right)
+		\end{align}
+		
+		If we evaluate $\frac{\partial \phi}{\partial \bo{q}}$ at the point $\bo{q} = \bo{q}_0$, $\dot{\bo{q}} = \dot{\bo{q}}_0$, $\tau = \tau_0$, we can use the fact that $\bo{C}(\dot{\bo{q}}_0, \bo{q}_0) \dot{\bo{q}}_0 + \bo{g}(\bo{q}_0) = \tau_0$ to avoid computing derivative $\frac{\partial \bo{H}^{-1}}{\partial \bo{q}}$:
+		
+		\begin{align}
+			\frac{\partial \phi}{\partial \bo{q}}
+			&=
+			\bo{H}^{-1} \left( \tau - \frac{\partial \bo{C}\dot{\bo{q}}}{\partial \bo{q}}  - \frac{\partial \bo{g}}{\partial \bo{q}} \right)
+		\end{align}
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Manipulator equation linearization, 5}
+	%\framesubtitle{State matrix}
+	\begin{flushleft}
+		
+		Let us find $\frac{\partial \phi}{\partial \dot{\bo{q}}}$:
+		%
+		\begin{align}
+			\frac{\partial \phi}{\partial \dot{\bo{q}}}
+			&=
+			\frac{\partial }{\partial \dot{\bo{q}}} \left(\bo{H}^{-1} (\tau - \bo{C} \dot{\bo{q}} - \bo{g} ) \right)
+			= \\
+			&=
+			-\bo{H}^{-1}\frac{\partial \bo{C} \dot{\bo{q}}}{\partial \dot{\bo{q}}}
+		\end{align}
+		
+	With that, we expressed all jacobians. The rest is the same as in the general case we studied in the first slides.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+%\begin{equation}
+%	\bo{A} = 
+%	\begin{bmatrix}
+%		0 & \bo{I} \\
+%		\frac{\partial (\bo{H}^{-1} (\bo{T}\bo{u} -  \bo{C} \dot{\bo{q}} - \bo{g}) )}{\partial \bo{q}} 
+%		&
+%		\frac{\partial (\bo{H}^{-1} (\bo{T}\bo{u} -  \bo{C} \dot{\bo{q}} - \bo{g}) )}{\partial \dot{\bo{q}}}
+%	\end{bmatrix}
+%\end{equation}
+%
+%
+%\begin{equation*}
+%	\frac{\partial }{\partial \bo{q}} (\bo{H}^{-1} (\bo{T}\bo{u} -  \bo{C} \dot{\bo{q}} - \bo{g}) ) 
+%	= 
+%	\frac{\partial \bo{H}^{-1}}{\partial \bo{q}} (\bo{T}\bo{u} -  \bo{C} \dot{\bo{q}} - \bo{g})
+%	+ 
+%	\bo{H}^{-1} 
+%	\frac{\partial }{\partial \bo{q}} 
+%	(\bo{T}\bo{u} -  \bo{C} \dot{\bo{q}} - \bo{g}) )
+%\end{equation*}
+%
+%\begin{equation}
+%	\frac{\partial (\bo{H}^{-1} (\bo{T}\bo{u} -  \bo{C} \dot{\bo{q}} - \bo{g}) )}{\partial \dot{\bo{q}}} 
+%	= 
+%	-\bo{H}^{-1}\bo{C} - \bo{H}^{-1} 
+%	\frac{\partial \bo{C}}{\partial \dot{\bo{q}}}  \dot{\bo{q}}
+%\end{equation}
+%
+%\begin{equation}
+%	\frac{\partial \bo{H}^{-1}}{\partial \bo{q}} = 
+%	- \bo{H}^{-1} \frac{\partial \bo{H}}{\partial \bo{q}} 
+%	\bo{H}^{-1}
+%\end{equation}
+
+
+
+%\begin{frame}{Linear control for nonlinear systems}
+%	\framesubtitle{Linearization around node}
+%	\begin{flushleft}
+%		
+%		In the general case it is:
+%	
+%	Let us make an assumption that our linearization point $\bo{q}_0$, $\dot{\bo{q}}_0$ and $\bo{u}_0$ is a node, meaning that $\ddot{\bo{q}}_0 = 0$, which implies:
+%	
+%	\begin{equation}
+%		\bo{C} \dot{\bo{q}} + \bo{g} = \bo{T}\bo{u}
+%	\end{equation}
+%
+%Then 
+%	
+%	\begin{equation*}
+%		\frac{\partial }{\partial \bo{q}} (\bo{H}^{-1} (\bo{T}\bo{u} -  \bo{C} \dot{\bo{q}} - \bo{g}) ) 
+%		= 
+%		\frac{\partial \bo{H}^{-1}}{\partial \bo{q}} 0
+%		+ 
+%		\bo{H}^{-1} 
+%		\frac{\partial }{\partial \bo{q}} 
+%		(\bo{T}\bo{u} -  \bo{C} \dot{\bo{q}} - \bo{g}) )
+%	\end{equation*}
+%	
+%	
+%		
+%	\end{flushleft}
+%\end{frame}
+
+
+%\begin{frame}{Linear control for nonlinear systems}
+%\framesubtitle{Control matrix}
+%\begin{flushleft}
+%
+%Control matrix $\bo{B}$ becomes:
+%
+%\begin{equation}
+%    \bo{B} = 
+%    \begin{bmatrix}
+%    0\\
+%    \frac{\partial (\bo{H}^{-1} (\bo{T}\bo{u} -  \bo{C} \dot{\bo{q}} - \bo{g}) )}{\partial \bo{u}} 
+%    \end{bmatrix}
+%    =
+%        \begin{bmatrix}
+%    0\\
+%    \bo{H}^{-1} \bo{T}
+%    \end{bmatrix}
+%\end{equation}
+%
+%...and this does not look very clean and nice to use. Indeed, it is not easy or nice in practice.
+%
+%\end{flushleft}
+%\end{frame}
+
+
+
+\myqrframe
+
+\end{document}

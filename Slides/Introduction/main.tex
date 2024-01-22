@@ -1,0 +1,748 @@
+\documentclass{beamer}
+
+\input{settings.tex}
+
+
+\title{ODE and State Space}
+\subtitle{Control Theory, Lecture 1}
+\author{by Sergei Savin}
+\centering
+\date{\mydate}
+
+
+
+\begin{document}
+\maketitle
+
+
+%\begin{frame}{Content}
+%
+%\begin{itemize}
+%\item Motivation
+%\item Ordinary differential equations
+%    \begin{itemize}
+%    \item 1st order
+%    \item n-th order
+%    \end{itemize}
+%\item Linear differential equations
+%    \begin{itemize}
+%    \item 1st order
+%    \item n-th order
+%    \end{itemize}
+%\item Changing n-th order ODE to a State-Space form
+%\item State-Space to ODE
+%\item Read more
+%\end{itemize}
+%
+%\end{frame}
+
+
+
+
+\begin{frame}{Ordinary differential equations, 1st order}
+%\framesubtitle{}
+\begin{flushleft}
+
+Let us remember the normal form of first-order \emph{ordinary differential equations (ODEs):}
+
+\begin{equation}
+    \dot{\bo{x}} = \bo{f} (\bo{x}, t)
+\end{equation}
+
+where $\bo{x} = \bo{x}(t)$ is the solution of the equation and $t$ is a free variable (usually - time).
+
+\bigskip
+
+\begin{definition}
+We can call this equation (same as any other ODEs) a \emph{dynamical system}, and $\bo{x}$ is called the \emph{state} of the dynamical system.  
+\end{definition}
+
+\begin{example}
+\begin{equation}
+    \dot{x} = -3 x^3 - 7 
+\end{equation}
+\end{example}
+
+\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{State}
+%	\framesubtitle{1st order}
+	\begin{flushleft}
+		
+		\emph{State} of a dynamical system is a minimal set of variables that describe the system, in the sense that knowing current state and all future inputs you can predict the behavior of the system.
+		
+		\begin{example}
+			For a spring-damper system, the state variables could be position and velocity of the mass.
+		\end{example} 
+		\begin{example}
+			For a double pendulum, the state variables could be joint angles and joint velocities.
+		\end{example} 
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+
+
+\begin{frame}{ODEs, n-th order}
+%\framesubtitle{n-th order}
+\begin{flushleft}
+
+The normal form of an \emph{n-th order} ordinary differential equation is:
+
+\begin{equation}
+	y^{(n)} = f (y^{(n-1)}, y^{(n-2)}, ...\,, \dot{y}, y, t)
+\end{equation}
+			
+where $y = y(t)$ is the solution of the equation. Same as before, it is a \emph{dynamical system}, but this time we need more variables to describe the state of this system, for example we can use the set $\{ y, \ \dot{y} , ...\,,y^{(n-1)} \}$.
+
+\begin{example}[Pendulum]
+\begin{equation}
+    \ddot{y} = - 0.1 \dot y - 7\sin(y)
+\end{equation}
+\end{example}
+
+
+\begin{example}[DC motor under constant voltage]
+\begin{equation}
+\begin{cases}
+    \dot{y}_1 = - 100 \dot{y}_2 -2 y_1  + 10 \\
+    \ddot{y}_2 = -0.1 \dot{y}_2 + 100 y_1
+\end{cases}
+\end{equation}
+\end{example}
+
+\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Linear ODE, 1st order}
+\begin{flushleft}
+
+Linear ODEs of the first order have normal form:
+
+\begin{equation}
+    \dot{\bo{x}} = \bo{A} \bo{x}
+\end{equation}
+
+\begin{example}
+\begin{equation}
+\begin{cases}
+    \dot{x}_1 = -20 x_1 + 7 x_2 \\
+    \dot{x}_2 = 10.5 x_1 - 3 x_2
+\end{cases}
+\end{equation}
+\end{example}
+
+\begin{example}
+\begin{equation}
+\begin{bmatrix}
+\dot{x}_1 \\
+\dot{x}_2 \\
+\dot{x}_3
+\end{bmatrix} 
+= 
+\begin{bmatrix}
+-8   & 5   & 2  \\
+ 0.5 & -10 & -2 \\
+ 1   & -1 & -20
+\end{bmatrix}
+\begin{bmatrix}
+x_1 \\
+x_2 \\
+x_3
+\end{bmatrix} 
+\end{equation}
+\end{example}
+
+\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Linear differential equations, n-th order}
+%\framesubtitle{n-th order}
+\begin{flushleft}
+
+A single linear ODE of the n-th order are often written in the form:
+
+\begin{equation}
+    a_n y^{(n)} + 
+    ... +
+    a_2 \ddot{y} + a_1 \dot{y} + 
+    a_0 y = 0
+\end{equation}
+
+\begin{example}
+\begin{equation}
+12 \dddot{y} -
+    3 \ddot{y} + 5.5 \dot{y} + 
+    2 y = 0
+\end{equation}
+\end{example}
+
+\begin{example}
+\begin{equation}
+    5 \ddot{y} - 2 \dot{y} + 
+    10 y = 0
+\end{equation}
+\end{example}
+
+\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{ODEs with an input, 1}
+	%\framesubtitle{n-th order}
+	\begin{flushleft}
+		
+		Sometimes it is convenient to write an ODE in the form with an \emph{input}, for example:
+		
+		\begin{equation}
+			a_2 \ddot{y} + a_1 \dot{y} + 
+			a_0 y = u(t)
+		\end{equation}
+		
+		In this equation $u(t)$ is a function of time. This form offers us many uses:
+		
+		\begin{itemize}
+			\item We can use $u(t)$ to model \emph{control input}, (e.g. voltage, motor torque) that we directly control.
+			
+			\item We can use $u(t)$ to model external forces acting on the system.
+			
+			\item We can substitute particular function instead of $u(t)$, e.g. sine wave or step function, to study how the system behaves with such an input.
+		\end{itemize}
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{ODEs with an input, 1}
+	\begin{flushleft}
+		
+		Some examples of linear ODEs with one input:
+		
+		
+		\begin{example}
+			\begin{equation}
+				\begin{cases}
+					\dot{y}_1 = -20 y_1 + 7 y_2 + u \\
+					\dot{y}_2 = 10.5 y_1 - 3 y_2
+				\end{cases}
+			\end{equation}
+		\end{example}
+		
+		\begin{example}
+			\begin{equation}
+				\begin{bmatrix}
+					\dot{x}_1 \\
+					\dot{x}_2 \\
+					\dot{x}_3
+				\end{bmatrix} 
+				= 
+				\begin{bmatrix}
+					-8   & 5   & 2  \\
+					0.5 & -10 & -2 \\
+					1   & -1 & -20
+				\end{bmatrix}
+				\begin{bmatrix}
+					x_1 \\
+					x_2 \\
+					x_3
+				\end{bmatrix} 
+			+
+			\begin{bmatrix}
+				1    \\
+				0    \\
+				0   
+			\end{bmatrix}
+			u
+			\end{equation}
+		\end{example}
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Equations with an input}
+	%\framesubtitle{n-th order}
+	\begin{flushleft}
+		
+		General form of an n-th order linear ODE with an input can be presented as follows:
+		%
+		\begin{equation}
+			a_n y^{(n)} + 
+			... +
+			a_2 \ddot{y} + a_1 \dot{y} + 
+			a_0 y = u(t)
+		\end{equation}
+	
+	\bigskip
+		
+		State-space representation of a linear system with an input is:
+		%
+		\begin{equation}
+			\dot{\bo{x}} = \bo{A} \bo{x} + \bo{B} \bo{u}
+		\end{equation}
+		
+		Note that in latter, $\bo{u}$ can be either scalar or a vector.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+
+
+
+\begin{frame}{Equations with an output}
+	%\framesubtitle{n-th order}
+	\begin{flushleft}
+		
+		Equations can also have an output. The meaning of what is an output of an equation depends on the particular use-case - it is not a mathematical issue, it is a question of interpretation. For example, an output can mean:
+		
+		\begin{itemize}
+			\item What we measure (position and orientation of a quadrotor, angular velocity of motor's rotor, etc.).
+			
+			\item What we care about and/or what we want to control (height of a quadrotor, velocity of a car, etc.)
+			
+			\item etc.
+		\end{itemize}
+		
+		We often denote output as $y$, and it depends on the state of the system: $y = g(\bo{x})$
+		
+	\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Equations with an output}
+	%\framesubtitle{n-th order}
+	\begin{flushleft}
+		
+		State-space representation of a linear system with an input and an output is:
+		%
+		\begin{equation}
+		\begin{cases}
+				\dot{\bo{x}} = \bo{A} \bo{x} + \bo{B}\bo{u} \\
+				\bo{y} = \bo{C}\bo{x}
+		\end{cases}
+		\end{equation}
+		
+		If $\bo{u} \in \R$ and $\bo{y} \in \R$ (i.e. if they are scalars) and you want to represent the system with an output as a single ODE, it is typical to treat the output as the ODE variable:
+		
+		\begin{equation}
+			a_n y^{(n)} + 
+			... +
+			a_2 \ddot{y} + a_1 \dot{y} + 
+			a_0 y = u(t)
+		\end{equation}
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+
+
+\begin{frame}{Linear differential equations}
+%\framesubtitle{...are what we will study}
+\begin{flushleft}
+
+In this course we will focus entirely on linear dynamical systems, expressed as ODEs:
+
+\begin{equation}
+    a_n y^{(n)} +
+    ... +
+    a_2 \ddot{y} + a_1 \dot{y} + 
+    a_0 y = u(t)
+\end{equation}
+
+or in state-space form:
+
+\begin{equation}
+	\begin{cases}
+		\dot{\bo{x}} = \bo{A} \bo{x} + \bo{B}\bo{u} \\
+		\bo{y} = \bo{C}\bo{x}
+	\end{cases}
+\end{equation}
+
+If $\bo{u}$ and $\bo{y}$ are scalars, the system is called \emph{single-input single-output (SISO)}, if they are vectors - \emph{multi-input multi-output (MIMO)}.
+
+\bigskip
+
+We can always express a SISO system in either form - ODE or state-space.
+
+\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{ODE to State-Space conversion}
+% \framesubtitle{...are what we will study}
+\begin{flushleft}
+
+Consider eq. $\dddot{y} + a_2 \ddot{y} + a_1 \dot{y} + a_0 y =u$.
+
+\bigskip
+
+Make a substitution: $x_1 = y$, $x_2 = \dot{y}$, $x_3 = \ddot{y}$. We get:
+
+\begin{align}
+        \dot{x}_1 &= \dot{y} = x_2 \\
+        \dot{x}_2 &= \ddot{y} = x_3 \\
+        \dot{x}_3 &=  u-a_2 \ddot{y} - a_1 \dot{y} - a_0 y = 
+        u-a_2 x_3 - a_1 x_2 - a_0 x_1
+\end{align}
+
+Which can be directly put in the state-space form:
+
+\begin{equation}
+\begin{bmatrix}
+\dot{x}_1 \\ \dot{x}_2 \\ \dot{x}_3
+\end{bmatrix} 
+=
+\begin{bmatrix}
+0 & 1 & 0 \\ 
+0 & 0 & 1 \\
+-a_0 & -a_1 & -a_2
+\end{bmatrix} 
+\begin{bmatrix}
+x_1 \\ x_2 \\ x_3
+\end{bmatrix} 
++ 
+\begin{bmatrix}
+0 \\ 0 \\ u
+\end{bmatrix}
+\end{equation}
+
+
+\end{flushleft}
+\end{frame}
+
+
+
+
+{
+\setbeamercolor{background canvas}{bg=mywhitepink}
+\begin{frame}{State-Space to ODE conversion, 1}
+	% \framesubtitle{...are what we will study}
+	\begin{flushleft}
+		
+		Consider State-Space system:
+		%
+		\begin{equation}
+			\begin{cases}
+				\dot{\bo{x}} = \bo{A} \bo{x} \\
+				y = \bo{C}\bo{x}
+			\end{cases}
+		\end{equation}
+	
+		We want to find an equivalent representation in the ODE form:
+		%
+		\begin{equation}
+			y^{(n)} = d_{n-1} y^{(n-1)} + ... + d_1 \dot y + d_0 y
+		\end{equation}
+		
+		Defining $\bo{d}\T = \begin{bmatrix}
+			d_0 & d_1 & ... & d_{n-1}   
+		\end{bmatrix}$ and 
+	$\bo{y} = \begin{bmatrix}
+		 y & \dot y & ... & y^{(n-1)} 
+	\end{bmatrix}\T$, we can re-write the ODE as:
+		%
+		\begin{equation}
+		y^{(n)} = \bo{d}\T \bo{y}
+		\end{equation}
+
+		Thus, if we can find $\bo{d}$, we can solve the problem.
+		
+		
+	\end{flushleft}
+\end{frame}
+}
+
+
+
+{
+	\setbeamercolor{background canvas}{bg=mywhitepink}
+\begin{frame}{State-Space to ODE conversion, 2}
+	% \framesubtitle{...are what we will study}
+	\begin{flushleft}
+		
+		We can differentiate $y = \bo{C}\bo{x}$ n times:
+		%
+		\begin{align}
+			y &= \bo{C}\bo{x} \\
+			\dot y &= \bo{C}\dot{\bo{x}} = \bo{C}\bo{A}\bo{x} \\
+			... \\
+			y^{(n)} &= \bo{C}\bo{x}^{(n)} = \bo{C}\bo{A}^n\bo{x}
+		\end{align}
+		
+		This gives us relation between $\bo{y}$ and $\bo{x}$:
+		%
+		\begin{align}
+			\bo{y} = 
+			\begin{bmatrix}
+				\bo{C} \\
+				\bo{C} \bo{A} \\
+				... \\
+				\bo{C}\bo{A}^{n-1}
+			\end{bmatrix}
+		\bo{x} = \mathcal{O}\bo{x}
+		\end{align}
+		%
+		where matrix $\mathcal{O}$ is called observability matrix.
+		
+		
+	\end{flushleft}
+\end{frame}
+}
+
+
+{
+	\setbeamercolor{background canvas}{bg=mywhitepink}
+\begin{frame}{State-Space to ODE conversion, 3}
+	% \framesubtitle{...are what we will study}
+	\begin{flushleft}
+		
+		As long as the observability matrix $\mathcal{O}$ is full rank, we can express the state as: 
+		%
+		\begin{align}
+			\bo{x}=\mathcal{O}^{-1}\bo{y}
+		\end{align}
+		
+		Then we re-write $y^{(n)} = \bo{C}\bo{A}^n\bo{x}$ as:
+		%
+		\begin{align}
+			y^{(n)} = \bo{C}\bo{A}^n\mathcal{O}^{-1}\bo{y}
+		\end{align}
+		
+		Thus, $\bo{d}\T = \bo{C}\bo{A}^n\mathcal{O}^{-1}$ and the ODE takes the form:
+		%
+		\begin{align}
+			y^{(n)} = \bo{C}\bo{A}^n\mathcal{O}^{-1}
+			\begin{bmatrix}
+				y \\ \dot y \\ ... \\ y^{(n-1)} 
+			\end{bmatrix}
+		\end{align}
+		
+		You can see an example in the appendix A.
+		
+		
+	\end{flushleft}
+\end{frame}
+}
+
+
+\begin{frame}{Read more}
+
+\begin{itemize}
+	
+\item 2.14 Analysis and Design of Feedback Control Systems:
+
+\begin{itemize}
+	\item  \bref{http://web.mit.edu/2.14/www/Handouts/StateSpace.pdf}{State-Space Representation of LTI Systems}
+	
+	\item  \bref{http://web.mit.edu/2.14/www/Handouts/StateSpaceResponse.pdf}{Time-Domain Solution of LTI State Equations}
+\end{itemize}	
+	
+\item \bref{https://lpsa.swarthmore.edu/}{Linear Physical Systems Analysis}:
+
+\begin{itemize}
+\item State Space Representations of Linear Physical Systems \bref{https://lpsa.swarthmore.edu/Representations/SysRepSS.html}{lpsa.swarthmore.edu/Representations/SysRepSS.html}
+
+\item Transformation: Differential Equation to State Space \bref{https://lpsa.swarthmore.edu/Representations/SysRepTransformations/DE2SS.html}{lpsa.swarthmore.edu/.../DE2SS.html}
+\end{itemize}	
+
+\end{itemize}
+
+\end{frame}
+
+
+
+\myqrframe
+
+
+
+\begin{frame}{Appendix}
+	
+	\centerline{\huge Appendix A}
+	
+\end{frame}
+
+
+
+\begin{frame}{State Space to ODE conversion, 1}
+	\framesubtitle{(extra)}
+	\begin{flushleft}
+		
+		Consider a system in state-space form:
+		
+		\begin{equation}
+			\label{eq:SS}
+			\begin{cases}
+				\begin{bmatrix}
+					\dot x_1 \\ 
+					\dot x_2
+				\end{bmatrix} 
+				= 
+				\begin{bmatrix}
+					a_{11} & a_{12} \\ 
+					a_{21} & a_{22}
+				\end{bmatrix} 
+				\begin{bmatrix}
+					x_1 \\ 
+					x_2
+				\end{bmatrix} 
+				\\
+				y = 
+				\begin{bmatrix}
+					c_1 & 
+					c_2
+				\end{bmatrix} 
+				\begin{bmatrix}
+					x_1 \\ 
+					x_2
+				\end{bmatrix} 
+			\end{cases}
+			\Longleftrightarrow \ \ 
+			\begin{cases}
+				\dx{x} = \bo{A} \bo{x} \\
+				y = \bo{C} \bo{x} 
+			\end{cases}
+		\end{equation}
+		
+		We want to rewrite it as a linear ODE:
+		
+		\begin{equation}
+			\label{eq:ODE}
+			\ddot{y} + b_2 \dot{y} + b_1 y = 0
+		\end{equation}
+		
+		Note that initial conditions of both equation need to agree.
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{State Space to ODE}
+	\begin{flushleft}
+		
+		Since $y = \bo{C} \bo{x}$, its derivative is $\dot y = \bo{C} \dot{\bo{x}}$:
+		
+		\begin{equation}
+			\dot y = \bo{C} \bo{A} \bo{x}
+		\end{equation}
+		%
+		\begin{equation}
+			\dot y = \myvecT{(a_{11}c_1 + a_{21}c_2)}{(a_{12}c_1 + a_{22}c_2)}
+			\myvec{x_1}{x_2}    
+		\end{equation}
+		
+		Analogous for $\ddot y$:
+		
+		\begin{equation}
+			\ddot y = \bo{C} \bo{A} \bo{A} \bo{x}
+		\end{equation}
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{State Space to ODE}
+	\begin{flushleft}
+		
+		Combining our results we find the linear transformation between the variables $x_1$, $x_2$ and $y$, $\dot y$:
+		
+		\begin{equation}
+			\myvec{y}{\dot y} = 
+			\begin{bmatrix}
+				c_1                                     & c_2 \\ 
+				(a_{11}c_1 + a_{21}c_2) & (a_{12}c_1 + a_{22}c_2)
+			\end{bmatrix} 
+			\myvec{x_1}{x_2}    
+		\end{equation}
+		
+		Resulting transformation matrix is:
+		
+		\begin{equation}
+			\bo{T} = 
+			\begin{bmatrix}
+				c_1                                     & c_2 \\ 
+				(a_{11}c_1 + a_{21}c_2) & (a_{12}c_1 + a_{22}c_2)
+			\end{bmatrix} 
+		\end{equation}
+		\begin{equation}
+			\bo{x}
+			= 
+			\bo{T}^{-1}
+			\begin{bmatrix}
+				y \\ 
+				\dot y
+			\end{bmatrix} 
+		\end{equation}
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{State Space to ODE}
+	\begin{flushleft}
+		
+		Remember that:
+		%
+		\begin{align}
+			\ddot y = \bo{C} \bo{A} \bo{A} \bo{x}
+			\\
+			\ddot y = \bo{C} \bo{A} \bo{A} \bo{T}^{-1} 
+			\begin{bmatrix}
+				y \\ 
+				\dot y
+			\end{bmatrix}
+		\end{align}
+		
+		So, we obtained $\ddot y$ as a linear function of $y$, $\dot y$.       From this it is clear how the same can be generalized to higher dimensions.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{State Space to ODE}
+	%\framesubtitle{part 5}
+	\begin{flushleft}
+		
+		\textcolor{blue}{\href{https://github.com/SergeiSa/Control-Theory-Slides-Spring-2022/blob/main/ColabNotebooks/StateSpace2ODE.ipynb}{Check out the code implementation.}}
+		
+		\bigskip
+		
+		
+		\centerline{\textcolor{black}{\qrcode[height=2.1in]{https://github.com/SergeiSa/Control-Theory-Slides-Spring-2022/blob/main/ColabNotebooks/StateSpace2ODE.ipynb}}}
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+\end{document}

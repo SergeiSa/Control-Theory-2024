@@ -1,0 +1,611 @@
+\documentclass{beamer}
+
+\input{settings.tex}
+
+
+\title{Discrete Dynamics}
+\subtitle{Control Theory, Lecture 6}
+\author{by Sergei Savin}
+\centering
+\date{\mydate}
+
+
+
+\begin{document}
+\maketitle
+
+
+\begin{frame}{Content}
+
+\begin{itemize}
+\item Discrete Dynamics
+\item Stability of the Discrete Dynamics
+\item CT-LTI: Analytical solution
+\begin{itemize}
+    \item Matrix exponential
+    \item Analytical solution
+    \item Forced state Response
+\end{itemize}
+\item Discretization
+\begin{itemize}
+	\item Exact
+	\item Zero order hold
+\end{itemize}
+\item Read more
+\end{itemize}
+
+\end{frame}
+
+
+
+
+
+\begin{frame}{Discrete Dynamics}
+% \framesubtitle{Part 1}
+\begin{flushleft}
+
+The following dynamical system is called \emph{discrete}:
+
+\begin{equation}
+    \bo{x}_{i+1} = \bo{A}\bo{x}_i + \bo{B}\bo{u}_i
+\end{equation}
+
+Note that those:
+
+\begin{itemize}
+    \item have no derivatives in the equation;
+    \item are easily simulated.
+\end{itemize}
+
+\bigskip
+
+The affine control for this system can be given as:
+
+\begin{equation}
+    \bo{u}_i = -\bo{K}\bo{x}_i + \bo{u}_i^*
+\end{equation}
+
+\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Stability of the Discrete Dynamics}
+	\framesubtitle{Real eigenvalues}
+	\begin{flushleft}
+		
+		Let us consider stability of the discrete dynamical system where matrix $\bo{A}$ has purely real eigenvalues:
+		
+		\begin{equation}
+			\bo{x}_{i+1} = \bo{A}\bo{x}_i
+		\end{equation}		
+		
+		With eigendecomposition $\bo{A} = \bo{V}^{-1} \bo{D} \bo{V}$ (where $\bo{D}$ is a diagonal matrix with eigenvalues $\lambda_j$ of $\bo{A}$ on its diagonal)  and introducing notation $\bo{z}_i = \bo{V}\bo{x}_i$ we get:
+		
+		\begin{equation}
+			\bo{x}_{i+1} = \bo{V}^{-1} \bo{D} \bo{V}\bo{x}_i
+		\end{equation}
+		\begin{equation}
+			\bo{z}_{i+1} =  \bo{D} \bo{z}_i
+		\end{equation}
+		
+		Meaning that the dynamics became a system of independent scalar equations $z_{j, i+1} =  \lambda_j z_{j, i}$. 
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Stability of the Discrete Dynamics}
+	\framesubtitle{Real eigenvalues}
+	\begin{flushleft}
+		
+		Thus, with $z_{j, i+1} =  \lambda_j z_{j, i}$ we can find now the absolute value of the scalars $z_{j}$ will dwindle with time iff $|\lambda_j| < 1$:
+		
+		\begin{equation}
+			\left| \frac{z_{j, i+1}}{z_{j, i}} \right | =   | \lambda_j |
+		\end{equation}
+		 
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Stability of the Discrete Dynamics}
+	\framesubtitle{2x2 system}
+	\begin{flushleft}
+		
+		Let us consider stability of the discrete dynamical system with a 2-by-2 matrix $\bo{A}$:
+		
+		\begin{equation}
+			\begin{bmatrix}
+				x_{1, i+1} \\ x_{2, i+1}
+			\end{bmatrix}
+			= 
+			\begin{bmatrix}
+				\alpha & -\beta \\ \beta & \alpha
+			\end{bmatrix}     
+			\begin{bmatrix}
+				x_{1, i} \\ x_{2, i}
+			\end{bmatrix}
+		\end{equation}	
+		
+		Let us find norms of $\begin{bmatrix}
+			x_{1, i+1} \\ x_{2, i+1}
+		\end{bmatrix}$ and $\begin{bmatrix}
+		x_{1, i} \\ x_{2, i}
+	\end{bmatrix}$:
+
+
+		\begin{equation}
+		\left | \left|
+		\begin{bmatrix}
+			x_{1, i} \\ x_{2, i}
+		\end{bmatrix}
+		\right | \right|^2
+			= 
+	 	x_{1, i}^2 + x_{2, i}^2
+		\end{equation}
+
+		\begin{equation}
+			\left | \left|
+			\begin{bmatrix}
+				x_{1, i+1} \\ x_{2, i+1}
+			\end{bmatrix}
+			\right | \right|^2
+			= 
+			(\alpha^2 + \beta^2) (x_{1, i}^2 + x_{2, i}^2)
+		\end{equation}
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Stability of the Discrete Dynamics}
+	\framesubtitle{2x2 system}
+	\begin{flushleft}
+		
+		We can find the ratio of the norms of $\begin{bmatrix}
+			x_{1, i+1} \\ x_{2, i+1}
+		\end{bmatrix}$ and $\begin{bmatrix}
+			x_{1, i} \\ x_{2, i}
+		\end{bmatrix}$: 
+		
+		
+		
+		\begin{equation}
+			\left | \left|
+			\begin{bmatrix}
+				x_{1, i+1} \\ x_{2, i+1}
+			\end{bmatrix}
+			\right | \right|^2 
+			/ 
+			\left | \left|
+			\begin{bmatrix}
+				x_{1, i} \\ x_{2, i}
+			\end{bmatrix}
+			\right | \right|^2
+			= 
+			\alpha^2 + \beta^2
+		\end{equation}
+		
+		Remembering that eigenvalues of the system are $\lambda  = \alpha \pm j\beta$, we can rewrite the expression above as:
+		
+		\begin{equation}
+	\left | \left|
+	\begin{bmatrix}
+		x_{1, i+1} \\ x_{2, i+1}
+	\end{bmatrix}
+	\right | \right|^2 
+	/ 
+	\left | \left|
+	\begin{bmatrix}
+		x_{1, i} \\ x_{2, i}
+	\end{bmatrix}
+	\right | \right|^2
+	= 
+	| \lambda |^2
+		\end{equation}		
+		
+		We can see that the norm of the variable $\bo{x}$ will dwindle with time iff $|\lambda| < 1$.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Stability of the Discrete Dynamics}
+\begin{flushleft}
+
+General stability criterion is given below:
+
+\bigskip
+
+\begin{block}{Stability criterion}
+In general, discrete system $\bo{x}_{i+1} = \bo{A}\bo{x}_i$ is stable as long as the eigenvalues of $\bo{A}$ are smaller than 1 by absolute value: $|\lambda_i(\bo{A})| \leq 1, \; \forall i$.
+\end{block}
+
+\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}
+	
+	\centering{\huge CT-LTI: Analytical solution}
+	
+\end{frame}
+
+
+
+
+
+\begin{frame}{Matrix exponential}
+	% \framesubtitle{Limited control}
+	\begin{flushleft}
+		
+		Exponential $e^a$ is defined as a series:
+		
+		\begin{equation}
+			e^a =1+a+\frac{1}{2} a^2
+			+\frac{1}{6} a^3 + ... = \sum_{n=0}^{\infty} \frac{1}{n!} a^n
+		\end{equation}
+		
+		Matrix exponential $e^\bo{A}$ is defined as a series:
+		
+		\begin{equation}
+			e^\bo{A} = \bo{I}+\bo{A}+\frac{1}{2} \bo{A}\bo{A}
+			+\frac{1}{6} \bo{A}\bo{A}\bo{A} + ... = \sum_{n=0}^{\infty} \frac{1}{n!} \bo{A}^n
+		\end{equation}
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Analytical solution to ODE}
+	% \framesubtitle{Limited control}
+	\begin{flushleft}
+		
+		An ODE of the form $\dot x = a x$ has analytical solution $x(t) = e^{at} x(0)$.
+		
+		\bigskip
+		
+		An ODE of the form $\dot{\bo{x}} = \bo{A}  \bo{x}$ has analytical solution $\bo{x}(t) = e^{\bo{A}t}  \bo{x}(0)$.
+		
+		\bigskip
+		
+		Let us check that this is a solution:
+		
+		\begin{align}
+			\bo{x}(t) &= \left( \bo{I}+\bo{A}t+\frac{1}{2} \bo{A}\bo{A}t^2
+			+\frac{1}{6} \bo{A}\bo{A}\bo{A}t^3 + ... \right)  \bo{x}(0) &
+			\\
+			\dot{\bo{x}}(t) &= \left( \bo{A}+\bo{A}\bo{A}t
+			+\frac{1}{2}\bo{A}\bo{A}\bo{A}t^2 + ... \right)  \bo{x}(0) 	&		
+			\\
+			\dot{\bo{x}}(t) &= \bo{A} \left(\bo{I} +\bo{A}t
+			+\frac{1}{2}\bo{A}\bo{A}t^2 + ... \right)  \bo{x}(0) 	&		
+			\\
+			\dot{\bo{x}}(t) &= \bo{A} e^{\bo{A}t}  \bo{x}(0) 	&		 			
+			\\
+			\dot{\bo{x}}(t) &= \bo{A} \bo{x}(t)  &\ \ \qed
+		\end{align}
+		
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Forced State Response (LTI) (1)}
+	% \framesubtitle{Limited control}
+	\begin{flushleft}
+		
+		An ODE of the form $\dot x = a x + bu(t)$ also has analytical solution. To find it, we first find the following derivative:
+		%
+		\begin{equation}
+			\frac{d}{dt} \left( e^{-at} x(t) \right) = e^{-at} \dot x(t) - a e^{-at} x(t)
+		\end{equation}
+		
+		Multiplying $\dot x = a x + bu(t)$ by $e^{-at}$ we see:
+		
+		\begin{align}
+			e^{-at} \dot x = e^{-at} a x + e^{-at} bu(t)
+			\\
+			e^{-at} \dot x -  e^{-at} a x= e^{-at} bu(t)
+			\\
+			\frac{d}{dt} \left( e^{-at} x(t) \right) = e^{-at} bu(t)
+			\\
+			\int_{0}^{t} \frac{d}{d\tau} \left( e^{-a\tau} x(\tau) \right) d\tau = 	\int_{0}^{t}  e^{-a\tau} bu(\tau) d\tau
+		\end{align}
+		
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Forced State Response (LTI) (2)}
+	% \framesubtitle{Limited control}
+	\begin{flushleft}
+		
+		Continuing the derivation:
+		
+		\begin{align}
+			\int_{0}^{t} \frac{d}{d\tau} \left( e^{-a\tau} x(\tau) \right) d\tau = 	\int_{0}^{t}  e^{-a\tau} bu(\tau) d\tau
+			\\
+			e^{-at} x(t) - x(0) = \int_{0}^{t}  e^{-a\tau} bu(\tau) d\tau
+			\\
+			x(t) = e^{at} x(0) + e^{at} \int_{0}^{t}  e^{-a\tau} bu(\tau) d\tau
+			\\
+			x(t) = e^{at} x(0) + \int_{0}^{t}  e^{a(t-\tau)} bu(\tau) d\tau
+		\end{align}
+		
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Forced State Response (LTI) (3)}
+	% \framesubtitle{Limited control}
+	\begin{flushleft}
+		
+		State-space equation $\dot{\bo{x}} = \bo{A}  \bo{x} + \bo{B}  \bo{u}(t)$ also has an analytical solution:
+		
+		\begin{equation}
+			\bo{x}(t) = e^{\bo{A}t}  \bo{x}(0) + 
+			\int_{0}^{t} e^{\bo{A}(t-\tau)} \bo{B}  \bo{u}(\tau) d\tau
+		\end{equation}
+		
+		The same can be re-written as:
+		
+		\begin{equation}
+			\bo{x}(t) = e^{\bo{A}t}  \bo{x}(0) + 
+			e^{\bo{A}t} \int_{0}^{t} e^{-\bo{A}\tau} \bo{B}  \bo{u}(\tau) d\tau
+		\end{equation}
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+
+
+\begin{frame}
+	
+		\centering{\huge Discretization}
+	
+\end{frame}
+
+
+
+
+
+\begin{frame}{From analytical solution to discrete dynamics}
+	% \framesubtitle{Limited control}
+	\begin{flushleft}
+		Given a solution to a state-space system we can consider how the system evolves from the point $t=0$ to the point $t=\Delta t$, assuming that $\bo{u}(t) = \bo{u}_0 = \text{const}, \ t \in [ 0, \ \Delta t ]$, and denoting $\bo{x}(0) = \bo{x}_0$ and $\bo{x}(\Delta t) = \bo{x}_1$:
+		
+		\begin{equation}
+			\bo{x}_1 = e^{\bo{A}\Delta t}  \bo{x}_0 + 
+			e^{\bo{A} \Delta t} \int_{0}^{\Delta t} e^{-\bo{A}\tau} \bo{B}  \bo{u}_0 d\tau
+		\end{equation}
+		
+		Now we denote:
+		%
+		\begin{align}
+			\bar{\bo{A}} = e^{\bo{A}\Delta t}, \ \ \
+			\bar{\bo{B}} = e^{\bo{A} \Delta t} \int_{0}^{\Delta t} e^{-\bo{A}\tau} \bo{B} d\tau
+		\end{align}
+	
+		We get:
+		%
+		\begin{equation}
+			\bo{x}_1 = \bar{\bo{A}}  \bo{x}_0 + \bar{\bo{B}}  \bo{u}_0
+		\end{equation}		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Discretization via finite differences}
+%\framesubtitle{Finite difference}
+\begin{flushleft}
+
+Consider linear time-invariant autonomous system:
+
+\begin{equation}
+    \dot {\bo{x}} = \bo{A} \bo{x}
+\end{equation}
+
+
+The time derivative $\dot {\bo{x}}$ can be replaces with a finite difference:
+
+\begin{equation}
+\dot {\bo{x}} \approx \frac{1}{\Delta t}(\bo{x}(t + \Delta t) - \bo{x}(t))
+\end{equation}
+
+Note that we could have also used other definitions of a finite difference:
+
+\begin{equation}
+\dot {\bo{x}} \approx \frac{1}{\Delta t}(\bo{x}(t + 0.5\Delta t) - \bo{x}(t - 0.5\Delta t))
+\end{equation}
+
+or
+
+\begin{equation}
+\dot {\bo{x}} \approx \frac{1}{\Delta t}(\bo{x}(t) - \bo{x}(t - \Delta t))
+\end{equation}
+
+\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Zero-order hold (1)}
+%\framesubtitle{Finite difference notation}
+\begin{flushleft}
+We can introduce notation:
+
+\begin{equation}
+\begin{cases}
+\bo{x}_0 = \bo{x}(0) \\
+\bo{x}_1 = \bo{x}(\Delta t) \\
+\bo{x}_2 = \bo{x}(2\Delta t) \\
+... \\
+\bo{x}_n = \bo{x}(n\Delta t) 
+\end{cases}
+\end{equation}
+
+We say that $\bo{x}_i$ is the value of $\bo{x}$ at the time step $i$. Then the finite difference can be written, for example, as follows:
+
+\begin{equation}
+\dot {\bo{x}} \approx \frac{1}{\Delta t}(\bo{x}_{i+1} - \bo{x}_i)
+\end{equation}
+
+\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Zero-order hold (2)}
+%\framesubtitle{Finite difference in an autonomous LTI}
+\begin{flushleft}
+
+We can rewrite our original autonomous LTI as follows:
+
+\begin{equation}
+\frac{1}{\Delta t}(\bo{x}_{i + 1} - \bo{x}_i) = \bo{A} \bo{x}_i
+\end{equation}
+Isolating $\bo{x}_{i + 1}$ on the left hand side, we get:
+\begin{equation}
+\bo{x}_{i + 1} = (\bo{A} \Delta t + \bo{I}) \bo{x}_i
+\end{equation}
+
+\noindent\rule{11cm}{0.4pt}
+
+Or alternatively:
+
+\begin{equation}
+\frac{1}{\Delta t}(\bo{x}_{i + 1} - \bo{x}_i) = \bo{A} \bo{x}_{i + 1}
+\end{equation}
+Isolating $\bo{x}_{i + 1}$ on the left hand side, we get:
+\begin{equation}
+\bo{x}_{i + 1} = (\bo{I} - \bo{A} \Delta t)^{-1} \bo{x}_i 
+\end{equation}
+
+\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Zero-order hold (3)}
+%\framesubtitle{Zero order hold}
+\begin{flushleft}
+
+Defining \emph{discrete state space matrix} $\bar{\bo{A}}$ and \emph{discrete control matrix} $\bar{\bo{B}}$ as follows:
+
+\begin{equation}
+\bar{\bo{A}} = \bo{A} \Delta t + \bo{I}
+\end{equation}
+\begin{equation}
+\bar{\bo{B}} = \bo{B} \Delta t
+\end{equation}
+%
+We get discrete dynamics:
+
+\begin{equation}
+\bo{x}_{i+1} = \bar{\bo{A}} \bo{x}_i + \bar{\bo{B}} \mathbf u_i
+\end{equation}
+
+This way of defining discrete dynamics is called \emph{zero order hold (ZOH)}.
+
+\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Zero-order hold (4)}
+%\framesubtitle{Zero order hold vs First order hold}
+\begin{flushleft}
+
+Graphically, we can understand what zero order hold is, by comparing it to the first order hold:
+
+\begin{figure} [h!]
+\begin{center}
+\includegraphics[width=3.5in]{ZOH.PNG}
+\end{center} 
+\caption{Different types of discretization} \label{F:ZOH}
+\end{figure}
+
+\end{flushleft}
+\end{frame}
+
+
+%\begin{frame}{ZOH and other types of discretization}
+%\framesubtitle{Exact discretization}
+%\begin{flushleft}
+%
+%Let the discrete state $\bo{x}_i$ correspond to continuous state $\bo{x}$ at the moment of time $t_i$. Then, we can say that the discretization is \emph{exact} the following holds for any solution $\bo{x}(t)$
+%
+%\begin{equation}
+%\bo{x}_0 = \bo{x}(t_0) \rightarrow 
+%\bo{x}_i = \bo{x}(t_i), \ \forall i
+%\end{equation}
+%
+%We can compute the exact discretization as follows:
+%
+%\begin{equation}
+%\bar{\bo{A}} = e^{\bo{A} \Delta t}
+%\end{equation}
+%\begin{equation}
+%\bar{\bo{B}} = \bo{B} \int_{t_0}^{t_0 + \Delta t} e^{\bo{A} s} ds
+%\end{equation}
+%
+%
+%\end{flushleft}
+%\end{frame}
+
+
+
+
+
+
+
+
+
+\begin{frame}{Read more}
+
+\begin{itemize}
+\item  \bref{http://cse.lab.imtlucca.it/~bemporad/teaching/ac/pdf/04a-TD_sys.pdf}{Automatic Control 1 Discrete-time linear systems}, Prof. Alberto Bemporad, University of Trento
+
+\item \bref{https://web.mit.edu/2.14/www/Handouts/StateSpaceResponse.pdf}{MIT 2.14, State Space Response}
+
+\end{itemize}
+
+\end{frame}
+
+
+
+\myqrframe
+
+\end{document}
