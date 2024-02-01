@@ -623,7 +623,7 @@ x_1 \\ x_2 \\ x_3
 			\end{cases}
 			\Longleftrightarrow \ \ 
 			\begin{cases}
-				\dx{x} = \bo{A} \bo{x} \\
+				\dot{\bo{x}} = \bo{A} \bo{x} \\
 				y = \bo{C} \bo{x} 
 			\end{cases}
 		\end{equation}
@@ -653,8 +653,13 @@ x_1 \\ x_2 \\ x_3
 		\end{equation}
 		%
 		\begin{equation}
-			\dot y = \myvecT{(a_{11}c_1 + a_{21}c_2)}{(a_{12}c_1 + a_{22}c_2)}
-			\myvec{x_1}{x_2}    
+			\dot y = 
+			\begin{bmatrix}
+				(a_{11}c_1 + a_{21}c_2) & (a_{12}c_1 + a_{22}c_2)
+			\end{bmatrix}
+		\begin{bmatrix}
+			x_1 \\ x_2
+		\end{bmatrix}
 		\end{equation}
 		
 		Analogous for $\ddot y$:
@@ -675,12 +680,17 @@ x_1 \\ x_2 \\ x_3
 		Combining our results we find the linear transformation between the variables $x_1$, $x_2$ and $y$, $\dot y$:
 		
 		\begin{equation}
-			\myvec{y}{\dot y} = 
+			\begin{bmatrix}
+				y \\ \dot y
+			\end{bmatrix}
+				= 
 			\begin{bmatrix}
 				c_1                                     & c_2 \\ 
 				(a_{11}c_1 + a_{21}c_2) & (a_{12}c_1 + a_{22}c_2)
 			\end{bmatrix} 
-			\myvec{x_1}{x_2}    
+			\begin{bmatrix}
+				x_1 \\ x_2
+			\end{bmatrix}
 		\end{equation}
 		
 		Resulting transformation matrix is:
