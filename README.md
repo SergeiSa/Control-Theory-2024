@@ -4,21 +4,21 @@ This repository contains regularly updated course materials. You can use lecture
 
 # Lecture slides
 
-* Lecture 1 - [Introduction](https://github.com/SergeiSa/Control-Theory-Slides-Spring-2023/blob/main/Slides/Introduction)
-* Lecture 2 - [Stability](https://github.com/SergeiSa/Control-Theory-Slides-Spring-2023/blob/main/Slides/Stability)
-* Lecture 3 - [Control](https://github.com/SergeiSa/Control-Theory-Slides-Spring-2023/blob/main/Slides/Control)
-* Lecture 4 - [Laplace transform](https://github.com/SergeiSa/Control-Theory-Slides-Spring-2023/blob/main/Slides/Laplace)
-* Lecture 5 - [Bode](https://github.com/SergeiSa/Control-Theory-Slides-Spring-2023/blob/main/Slides/Bode)
-* Lecture 6 - [Discrete models](https://github.com/SergeiSa/Control-Theory-Slides-Spring-2023/blob/main/Slides/Discrete/main.pdf)
-* Lecture 7 - [LQR, Riccati, Hamilton-Jacobi-Bellman](https://github.com/SergeiSa/Control-Theory-Slides-Spring-2023/blob/main/Slides/HJB_LQR)
-* Lecture 8 - [State estimation, Observers](https://github.com/SergeiSa/Control-Theory-Slides-Spring-2023/tree/main/Slides/Observer)
-* Lecture 9 - [Controllability, Observability](https://github.com/SergeiSa/Control-Theory-Slides-Spring-2023/tree/main/Slides/ControllabilityObservability)
-* Lecture 10 - [Kalman](https://github.com/SergeiSa/Control-Theory-Slides-Spring-2023/tree/main/Slides/Kalman)
 
-* Lecture 11 - https://github.com/SergeiSa/Control-Theory-Slides-Spring-2023/tree/main/Slides/Linearization
-* Lecture 12 - https://github.com/SergeiSa/Control-Theory-Slides-Spring-2023/tree/main/Slides/LyapunovTheory
+* Lecture 1 - [Introduction](https://github.com/SergeiSa/Control-Theory-2024/tree/main/Slides/Introduction)
+* Lecture 2 - [Stability](https://github.com/SergeiSa/Control-Theory-2024/tree/main/Slides/Stability)
+* Lecture 3 - [Control](https://github.com/SergeiSa/Control-Theory-2024/tree/main/Slides/Control)
+* Lecture 4 - [Laplace transform](https://github.com/SergeiSa/Control-Theory-2024/tree/main/Slides/Laplace)
+* Lecture 5 - [Bode](https://github.com/SergeiSa/Control-Theory-2024/tree/main/Slides/Bode)
+* Lecture 6 - [Discrete models](https://github.com/SergeiSa/Control-Theory-2024/tree/main/Slides/Discrete)
+* Lecture 7 - [LQR, Riccati, Hamilton-Jacobi-Bellman](https://github.com/SergeiSa/Control-Theory-2024/tree/main/Slides/HJB_LQR)
+* Lecture 8 - [State estimation, Observers](https://github.com/SergeiSa/Control-Theory-2024/tree/main/Slides/Observer)
+* Lecture 9 - [Controllability, Observability](https://github.com/SergeiSa/Control-Theory-2024/tree/main/Slides/ControllabilityObservability)
+* Lecture 10 - [Kalman](https://github.com/SergeiSa/Control-Theory-2024/tree/main/Slides/Kalman)
+* Lecture 11 - [Linearization](https://github.com/SergeiSa/Control-Theory-2024/tree/main/Slides/Linearization)
+* Lecture 12 - [Lyapunov Theory](https://github.com/SergeiSa/Control-Theory-2024/tree/main/Slides/LyapunovTheory)
+* Lecture 13 - [LMI](https://github.com/SergeiSa/Control-Theory-2024/tree/main/Slides/LMI)
 
-* Lecture - https://github.com/SergeiSa/Control-Theory-Slides-Spring-2023/tree/main/Slides/LMI
 
 # Lecture videos:
 
