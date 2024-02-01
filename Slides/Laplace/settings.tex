@@ -18,6 +18,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % itemize settings
 
+\definecolor{myhotpink}{RGB}{255, 80, 200}
+\definecolor{mywarmpink}{RGB}{255, 60, 160}
+\definecolor{mylightpink}{RGB}{255, 80, 200}
+\definecolor{mypink}{RGB}{255, 30, 80}
+\definecolor{mydarkpink}{RGB}{155, 25, 60}
+
 \definecolor{mypaleblue}{RGB}{240, 240, 255}
 \definecolor{mylightblue}{RGB}{120, 150, 255}
 \definecolor{myblue}{RGB}{90, 90, 255}
@@ -26,24 +32,18 @@
 \definecolor{myblackblue}{RGB}{40, 40, 120}
 
 \definecolor{mygreen}{RGB}{0, 200, 0}
-\definecolor{mydarkgreen}{RGB}{0, 120, 0}
 \definecolor{mygreen2}{RGB}{245, 255, 230}
 
 \definecolor{mygray}{gray}{0.8}
-\definecolor{mygray2}{RGB}{130, 130, 130}
 \definecolor{mydarkgray}{RGB}{80, 80, 160}
-\definecolor{mylightgray}{RGB}{160, 160, 160}
 
 \definecolor{mydarkred}{RGB}{160, 30, 30}
 \definecolor{mylightred}{RGB}{255, 150, 150}
 \definecolor{myred}{RGB}{200, 110, 110}
 \definecolor{myblackred}{RGB}{120, 40, 40}
 
-\definecolor{mypink}{RGB}{255, 30, 80}
-\definecolor{myhotpink}{RGB}{255, 80, 200}
-\definecolor{mywarmpink}{RGB}{255, 60, 160}
-\definecolor{mylightpink}{RGB}{255, 80, 200}
-\definecolor{mydarkpink}{RGB}{155, 25, 60}
+\definecolor{mygreen}{RGB}{0, 200, 0}
+\definecolor{mygreen2}{RGB}{205, 255, 200}
 
 \definecolor{mydarkcolor}{RGB}{60, 25, 155}
 \definecolor{mylightcolor}{RGB}{130, 180, 250}
@@ -97,36 +97,23 @@
 
 \usepackage{qrcode}
 
-\DeclareMathOperator*{\argmin}{arg\,min}
 \newcommand{\bo}[1] {\mathbf{#1}}
-
 \newcommand{\R}{\mathbb{R}} 
 \newcommand{\T}{^\top}     
 
-\newcommand{\dx}[1] {\dot{\mathbf{#1}}}
-\newcommand{\ma}[4] {\begin{bmatrix}
-		#1 & #2 \\ #3 & #4
-\end{bmatrix}}
-\newcommand{\myvec}[2] {\begin{bmatrix}
-		#1 \\ #2
-\end{bmatrix}}
-\newcommand{\myvecT}[2] {\begin{bmatrix}
-		#1 & #2
-\end{bmatrix}}
 
 
-\newcommand{\mydate}{Spring 2023}
+\newcommand{\mydate}{Spring 2024}
 
-\newcommand{\mygit}{\textcolor{blue}{\href{https://github.com/SergeiSa/Control-Theory-Slides-Spring-2023}{github.com/SergeiSa/Control-Theory-Slides-Spring-2023}}}
+\newcommand{\mygit}{\textcolor{blue}{\href{https://github.com/SergeiSa/Control-Theory-2024}{github.com/SergeiSa/Control-Theory-2024}}}
 
-\newcommand{\myqr}{ \textcolor{black}{\qrcode[height=1.5in]{https://github.com/SergeiSa/Control-Theory-Slides-Spring-2023}}
+\newcommand{\myqr}{ \textcolor{black}{\qrcode[height=1.5in]{https://github.com/SergeiSa/Control-Theory-2024}}
 }
 
 \newcommand{\myqrframe}{
 	\begin{frame}
-		\centerline{Lecture slides are available via Github, links are on Moodle}
+		\centerline{Lecture slides are available via Github:}
 		\bigskip
-		\centerline{You can help improve these slides at:}
 		\centerline{\mygit}
 		\bigskip
 		\myqr
