@@ -2,6 +2,12 @@
 
 \input{settings.tex}
 
+\newcommand{\db}[1] {\dot{\mathbf{#1}}}
+\newcommand{\bhat}[1] {\hat{\mathbf{#1}}}
+\newcommand{\dhat}[1] {\dot{\hat{\mathbf{#1}}}}
+\newcommand{\btil}[1] {\Tilde{\mathbf{#1}}}
+\newcommand{\dtil}[1] {\dot{\Tilde{\mathbf{#1}}}}
+
 
 \title{Kalman Filter}
 \subtitle{Control Theory, Lecture 10}
@@ -336,7 +342,7 @@ Mean has a number of properties:
 			\end{cases}
 		\end{equation}
 		
-		where $\bhat{x}_{i+1}^-$ is an \emph{a priori} estimate. \textcolor{mygray2}{We can re-write the last equation as 
+		where $\bhat{x}_{i+1}^-$ is an \emph{a priori} estimate. \textcolor{mylightgray}{We can re-write the last equation as 
 			$\bhat{x}_{i+1} = \bhat{x}_{i+1}^- + \bo{L}_i (\bo{H} \bo{x}_i - \bo{H} \bhat{x}_{i+1}^- + \bo{v}_i) $.} 
 		
 		\bigskip
