@@ -148,6 +148,10 @@ https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-241j-d
 ## Lecture 7 LQR
 * Underactuated robotics. Linear Quadratic Regulators - http://underactuated.mit.edu/lqr.html
 * Discrete LQR (slides) - https://stanford.edu/class/ee363/lectures/dlqr.pdf
+* Discrete LQR, infinite horizon (slides) - https://web.stanford.edu/class/ee363/lectures/dlqr-ss.pdf
+* F.L. Lewis, lecture notes - https://lewisgroup.uta.edu/ee5321/2013%20notes/2%20lqr%20dt%20and%20sampling.pdf
+* University of Freiburg, lecture notes - https://www.syscop.de/files/2019ss/sscs/summary/chap3c.pdf
+* Optimal Control: Discrete-Time LQR (slides, Cristian Mahulea) - https://webdiis.unizar.es/~cmahulea/course/lecture4.pdf
 * Videos:
   * Linear Quadratic Regulator (LQR) Control for the Inverted Pendulum on a Cart, Steve Brunton https://youtu.be/1_UobILf3cc
 
