@@ -145,14 +145,17 @@ http://www3.imperial.ac.uk/pls/portallive/docs/1/31851696.PDF
 * Dahleh, M., Dahleh, M.A. and Verghese, G., 2004. Lectures on dynamic systems and control. A+ A, 4(100), pp.1-100. (goes to z-transform, which is outside the scope of our course):
 https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-241j-dynamic-systems-and-control-spring-2011/readings/MIT6_241JS11_chap10.pdf
 
-## Lecture 8 Lyapunov Theory 
-* 3.9 Liapunov’s direct method - https://folk.uib.no/nmagb/m2142002l3.pdf
-* Universita degli studi di Padova Dipartimento di Ingegneria dell'Informazione, Nicoletta Bof, Ruggero Carli, Luca Schenato, Technical Report, Lyapunov Theory for Discrete Time Systems - https://arxiv.org/abs/1809.05289
-
-## Lecture 9 LQR
-* Linear Quadratic Regulators - http://underactuated.mit.edu/lqr.html
+## Lecture 7 LQR
+* Underactuated robotics. Linear Quadratic Regulators - http://underactuated.mit.edu/lqr.html
+* Discrete LQR (slides) - https://stanford.edu/class/ee363/lectures/dlqr.pdf
 * Videos:
   * Linear Quadratic Regulator (LQR) Control for the Inverted Pendulum on a Cart, Steve Brunton https://youtu.be/1_UobILf3cc
+
+
+
+## Lecture 8 Lyapunov Theory 
+* 3.9 Liapunov’s direct method - https://folk.uib.no/nmagb/m2142002l3.pdf
+* Universita degli studi di Padova Dipartimento di Ingegneria dell'Informazione, Nicoletta Bof, Ruggero Carli, Luca Schenato, Technical Report, Lyapunov Theory for Discrete Time Systems - https://arxiv.org/abs/1809.05289 
 
 ## Lecture 10 Observers
 
