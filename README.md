@@ -5,41 +5,35 @@ This repository contains regularly updated course materials. You can use lecture
 # Lecture slides
 
 
-* Lecture 1 - [Introduction](https://github.com/SergeiSa/Control-Theory-2024/tree/main/Slides/Introduction)
-* Lecture 2 - [Stability](https://github.com/SergeiSa/Control-Theory-2024/tree/main/Slides/Stability)
-* Lecture 3 - [Control](https://github.com/SergeiSa/Control-Theory-2024/tree/main/Slides/Control)
-* Lecture 4 - [Laplace transform](https://github.com/SergeiSa/Control-Theory-2024/tree/main/Slides/Laplace)
-* Lecture 5 - [Bode](https://github.com/SergeiSa/Control-Theory-2024/tree/main/Slides/Bode)
-* Lecture 6 - [Discrete models](https://github.com/SergeiSa/Control-Theory-2024/tree/main/Slides/Discrete)
-* Lecture 7 - [LQR, Riccati, Hamilton-Jacobi-Bellman](https://github.com/SergeiSa/Control-Theory-2024/tree/main/Slides/HJB_LQR)
-* Lecture 8 - [State estimation, Observers](https://github.com/SergeiSa/Control-Theory-2024/tree/main/Slides/Observer)
-* Lecture 9 - [Controllability, Observability](https://github.com/SergeiSa/Control-Theory-2024/tree/main/Slides/ControllabilityObservability)
-* Lecture 10 - [Kalman](https://github.com/SergeiSa/Control-Theory-2024/tree/main/Slides/Kalman)
-* Lecture 11 - [Linearization](https://github.com/SergeiSa/Control-Theory-2024/tree/main/Slides/Linearization)
-* Lecture 12 - [Lyapunov Theory](https://github.com/SergeiSa/Control-Theory-2024/tree/main/Slides/LyapunovTheory)
-* Lecture 13 - [LMI](https://github.com/SergeiSa/Control-Theory-2024/tree/main/Slides/LMI)
+* Lecture 1 - https://github.com/SergeiSa/Control-Theory-2024/blob/main/Slides/Introduction.pdf
+* Lecture 2 - https://github.com/SergeiSa/Control-Theory-2024/blob/main/Slides/Stability.pdf
+* Lecture 3 - https://github.com/SergeiSa/Control-Theory-2024/blob/main/Slides/Control.pdf
+* Lecture 4 - https://github.com/SergeiSa/Control-Theory-2024/blob/main/Slides/Laplace.pdf
+* Lecture 5 - https://github.com/SergeiSa/Control-Theory-2024/blob/main/Slides/Bode.pdf
+* Lecture 6 - https://github.com/SergeiSa/Control-Theory-2024/blob/main/Slides/Discrete.pdf
+* Lecture 7 - https://github.com/SergeiSa/Control-Theory-2024/blob/main/Slides/HJB_LQR.pdf
+* Lecture 8 - https://github.com/SergeiSa/Control-Theory-2024/blob/main/Slides/Observer.pdf
+* Lecture 9 - https://github.com/SergeiSa/Control-Theory-2024/blob/main/Slides/ControllabilityObservability.pdf
+* Lecture 10 - https://github.com/SergeiSa/Control-Theory-2024/blob/main/Slides/Kalman.pdf
+* Lecture 11 - https://github.com/SergeiSa/Control-Theory-2024/blob/main/Slides/LyapunovTheory.pdf
+* Lecture 12 - https://github.com/SergeiSa/Control-Theory-2024/blob/main/Slides/Linearization.pdf
 
 
 # Lecture videos:
 
-([playlist](https://www.youtube.com/watch?v=yxns2JKQK0M&list=PLlxR_sEKjSpRACHIQZcKNm-KjNQWlAltM&ab_channel=SergeiS))
 
-* Lecture 1 (State Space) - https://youtu.be/yxns2JKQK0M
-* Lecture 2 (Stability) - https://youtu.be/XnNlYsVebkU
-* Lecture 3 (Stabilizing control) - https://youtu.be/wV1iPkvXVV4
-* Lecture 4 (Laplace, Transfer functions) - https://youtu.be/8LMwvjSmt28
-* Lecture 5 (Bode) - https://youtu.be/d-R31Hmmrtk
-* Lecture 6 (Discrete) - https://youtu.be/j0Gooh-2mT4
-* Lecture 7 (LQR, Riccati) - https://youtu.be/CcZ2RnvFS2A
+[playlist](https://www.youtube.com/playlist?list=PLlxR_sEKjSpTmFuMQ84ityyaYwAvOthIJ)
 
+* Lecture 1 (State Space) - https://youtu.be/sgc9bQ7ao3A
+* Lecture 2 (Stability) - https://youtu.be/ZCjeTW4jjW8
+* Lecture 3 (Stabilizing control) - https://youtu.be/XFO02Z2W0Rs
+* Lecture 4 (Laplace, Transfer functions) - https://youtu.be/ow9sWpSf_YI
+* Lecture 5 (Bode) - https://youtu.be/U8szIWSVf6E
+* Lecture 6 (Discrete) - https://youtu.be/k4QQXFkcthw
+* Lecture 7 (LQR, Riccati) - 
 * Lecture 8 (Observers) -
 * Lecture 9 (Controllability, Observability) - 
 * Lecture 10 (Kalman) - 
-
-
-# Tutorial slides
-
-
 
 
 
@@ -65,16 +59,6 @@ This repository contains regularly updated course materials. You can use lecture
 * Practice 6 (Trajectory tracking) - https://github.com/SergeiSa/Control-Theory-Slides-Spring-2022/blob/main/Practice/Practice_6_TrajectoryTracking.ipynb
 * Practice 7 (Discrete) - https://github.com/SergeiSa/Control-Theory-Slides-Spring-2022/blob/main/Practice/Practice_7_Discrete.ipynb
 * Practice 8 (Lyapunov) - https://github.com/SergeiSa/Control-Theory-Slides-Spring-2022/blob/main/Practice/Practice_8_Lyapunov.ipynb
-
-# For contributors
-
-Pull requests with suggestions and improvements, however small or big, are welcome!
-
-The changes in lecture slides are going through an automated check.
-
-The PDFs are compiled and updated automatically when PR is merged (thanks to k1rill-fedoseev from the 2020 Linear Control class!). You don't need to update them manually. They are also uploaded as workflow artifacts for every new commit pushed into this repository. You can use them to see your changes.
- 
-Consider adding \*.pdf to the .git/info/exclude file on your local repo. Here is the ~~overy long but helpful~~ [description why it works](https://medium.com/@dave_lunny/exclude-files-from-git-without-committing-changes-to-gitignore-986fa712e78d)
 
 # Book suggestions
 
@@ -156,20 +140,13 @@ https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-241j-d
   * Linear Quadratic Regulator (LQR) Control for the Inverted Pendulum on a Cart, Steve Brunton https://youtu.be/1_UobILf3cc
 
 
-
-## Lecture 8 Lyapunov Theory 
-* 3.9 Liapunov’s direct method - https://folk.uib.no/nmagb/m2142002l3.pdf
-* Universita degli studi di Padova Dipartimento di Ingegneria dell'Informazione, Nicoletta Bof, Ruggero Carli, Luca Schenato, Technical Report, Lyapunov Theory for Discrete Time Systems - https://arxiv.org/abs/1809.05289 
-
-## Lecture 10 Observers
-
+## Lecture 8 Observers
 * Control System Design, An Introduction to State-Space Methods Bernard Friedland https://books.google.co.in/books/about/Control_System_Design.html?id=9WRKZlaCnF8C&redir_esc=y
   * LINEAR OBSERVERS
 * Videos:
   * Motivation for Full-State Estimation, Steve Brunton https://youtu.be/LTNMf8X21cY
 
-## Lecture 11 Controllability, Observability
-
+## Lecture 9 Controllability, Observability
 * Control System Design, An Introduction to State-Space Methods Bernard Friedland https://books.google.co.in/books/about/Control_System_Design.html?id=9WRKZlaCnF8C&redir_esc=y
   * 5.4 ALGEBRAIC CONDITIONS FOR CONTROLLABILITY AND OBSERVABILITY
 * Invariant subspaces, Sylvester equation, PBH https://stanford.edu/class/ee363/sessions/s2notes.pdf
@@ -178,20 +155,28 @@ https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-241j-d
   * Degrees of Controllability and Gramians, Steve Brunton -  https://youtu.be/ZNHx62HbKNA
   * Controllability and the PBH Test, Steve Brunton - https://youtu.be/0XJHgLrcPeA
 
-## Observer Design, Kalman Filter
+## Lecture 10 Kalman Filter
 * Control System Design, An Introduction to State-Space Methods Bernard Friedland https://books.google.co.in/books/about/Control_System_Design.html?id=9WRKZlaCnF8C&redir_esc=y
   * RANDOM PROCESSES
   * KALMAN FILTERS: OPTIMUM OBSERVERS 
 
-## Other
 
-### MIMO, LTI, LTV
-  * Equilibrium Points of Linear Autonomous Systems. 
-  [Link](https://www.math24.net/linear-autonomous-systems-equilibrium-points/)
+## Lyapunov Theory 
+* 3.9 Liapunov’s direct method - https://folk.uib.no/nmagb/m2142002l3.pdf
+* Universita degli studi di Padova Dipartimento di Ingegneria dell'Informazione, Nicoletta Bof, Ruggero Carli, Luca Schenato, Technical Report, Lyapunov Theory for Discrete Time Systems - https://arxiv.org/abs/1809.05289 
 
-### Optimal Control of LTI systems
- * Underactuated Robotics. Continuous dynamic programming.
-   [Link](http://underactuated.csail.mit.edu/dp.html#section3)
- * Control theory by S. Simrock - section 8:
-https://cds.cern.ch/record/1100534/files/p73.pdf
+
+
+
+
+
+# For contributors
+
+Pull requests with suggestions and improvements, however small or big, are welcome!
+
+The changes in lecture slides are going through an automated check.
+
+The PDFs are compiled and updated automatically when PR is merged (thanks to k1rill-fedoseev from the 2020 Linear Control class!). You don't need to update them manually. They are also uploaded as workflow artifacts for every new commit pushed into this repository. You can use them to see your changes.
+ 
+Consider adding \*.pdf to the .git/info/exclude file on your local repo. Here is the ~~overy long but helpful~~ [description why it works](https://medium.com/@dave_lunny/exclude-files-from-git-without-committing-changes-to-gitignore-986fa712e78d)
 
