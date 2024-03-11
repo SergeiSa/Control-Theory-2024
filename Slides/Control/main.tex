@@ -263,19 +263,21 @@ So, all you need to do is to find such $\bo{K}$ that $(\bo{A} - \bo{B}\bo{K})$ i
 
 
 
-\begin{frame}{Trajectory tracking (1)}
+\begin{frame}{Trajectory tracking (2)}
 	%\framesubtitle{Stability of the closed-loop system}
 	\begin{flushleft}
 		
 		We call $\bo{e}$ \emph{control error} and the equation $\dot{\bo{e}} = \bo{A}\bo{e} + \bo{B}\bo{v}$ is \emph{error dynamics}.
 		
-		With error dynamics we are back to the familiar problem - find control law $\bo{v} = -\bo{K}\bo{e}$ that makes closed-loop system stable:
+		\bigskip
+		
+		With that we are back to the familiar problem - find control law $\bo{v} = -\bo{K}\bo{e}$ that makes closed-loop system stable:
 		%
 		\begin{equation}
 			\dot{\bo{e}} = (\bo{A} - \bo{B}\bo{K}) \bo{e}
 		\end{equation}
 		
-		In original variables it is:
+		In the original variables it is:
 		%
 		\begin{equation}
 			\bo{u} = \bo{K}(\bo{x}^* - \bo{x}) + \bo{u}^*

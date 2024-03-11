@@ -3,7 +3,7 @@
 \input{settings.tex}
 
 
-\title{Hamilton-Jacobi-Bellman eq., Riccati eq., Linear Quadratic Regulator}
+\title{Riccati eq., Linear Quadratic Regulator}
 \subtitle{Control Theory, Lecture 7}
 \author{by Sergei Savin}
 \centering
@@ -32,8 +32,8 @@
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Hamilton-Jacobi-Bellman equation}
-\framesubtitle{Definitions}
+\begin{frame}{Control policy}
+%\framesubtitle{Definitions}
 \begin{flushleft}
 
 Let us define dynamics:
@@ -60,8 +60,8 @@ To connect with the previous ways we talked about control, we can say that choos
 
 
 
-\begin{frame}{Hamilton-Jacobi-Bellman equation}
-\framesubtitle{Cost, optimal cost}
+\begin{frame}{Cost, optimal cost}
+%\framesubtitle{}
 \begin{flushleft}
 
 Let $J$ be an additive cost function:
@@ -139,7 +139,7 @@ g(\bo{x}, \bo{u}) +
 \right] = 0
 \end{equation}
 
-This can be loosely interpreted as follows: the value in square brackets is $\dot J(\bo{x}_0, \pi)$, which is equal to 0 when $\pi = \pi^*(\bo{x}, t)$, and is positive otherwise (in the small vicinity of $\pi^*$), as $J(\bo{x}_0, \pi^*)$ is smaller than any $J(\bo{x}_0, \pi), \ \pi^* \neq \pi$.
+%This can be loosely interpreted as follows: the value in square brackets is $\dot J(\bo{x}_0, \pi)$, which is equal to 0 when $\pi = \pi^*(\bo{x}, t)$, and is positive otherwise (in the small vicinity of $\pi^*$), as $J(\bo{x}_0, \pi^*)$ is smaller than any $J(\bo{x}_0, \pi), \ \pi^* \neq \pi$.
 
 \bigskip
 
@@ -147,7 +147,7 @@ This can be loosely interpreted as follows: the value in square brackets is $\do
 We can find control that delivers minimum to the function \eqref{eq:HJB_0}:
 
 \begin{equation}
-u^* = \underset{\bo{u}}{\text{argmin}} \ 
+\bo{u}^* = \underset{\bo{u}}{\text{argmin}} \ 
 \left[ 
 g(\bo{x}, \bo{u}) + 
 \frac{\partial J^*}{\partial \bo{x}} \bo{f} (\bo{x}, \bo{u}) \right] 
@@ -160,8 +160,8 @@ g(\bo{x}, \bo{u}) +
 
 
 
-\begin{frame}{Algebraic Riccati}
-\framesubtitle{HJB for LTI}
+\begin{frame}{Algebraic Riccati (LTI case), 1}
+%\framesubtitle{HJB for LTI}
 \begin{flushleft}
 
 For LTI, dynamics is:
@@ -191,8 +191,9 @@ where $\bo{Q} = \bo{Q}^\top \geq 0 $ and $\bo{R} = \bo{R}^\top > 0$.
 \end{frame}
 
 
-\begin{frame}{Algebraic Riccati}
-\framesubtitle{HJB for LTI, part 2}
+
+\begin{frame}{Algebraic Riccati (LTI case), 2}
+%\framesubtitle{HJB for LTI, part 2}
 \begin{flushleft}
 
 There is a theorem that says that for LTI with quadratic cost, $J^*$ has the form:
@@ -241,8 +242,8 @@ Simplifying, we get:
 \end{frame}
 
 
-\begin{frame}{Algebraic Riccati}
-\framesubtitle{Linear Quadratic Regulator}
+\begin{frame}{Linear Quadratic Regulator, 1}
+%\framesubtitle{}
 \begin{flushleft}
 
 
@@ -274,7 +275,7 @@ where $\mathbf K = \bo{R}^{-1} \bo{B}^\top \bo{S}$ is the controller gain. This 
 
 
 
-\begin{frame}{Algebraic Riccati}
+\begin{frame}{Algebraic Riccati (LTI case), 3}
 % \framesubtitle{Algebraic Riccati}
 \begin{flushleft}
 
@@ -319,8 +320,8 @@ This is the \emph{Algebraic Riccati equation}.
 
 
 
-\begin{frame}{Algebraic Riccati}
-\framesubtitle{Numerical methods}
+\begin{frame}{LQR via software}
+%\framesubtitle{Numerical methods}
 \begin{flushleft}
 
 There are a number of ways to solve LQR:
@@ -330,7 +331,7 @@ There are a number of ways to solve LQR:
 \begin{itemize}
     \item In MATLAB there is a function \texttt{[K,S,P] = lqr(A,B,Q,R), where P=eig(A-B*K)}
     \item In Python, there is \texttt{S = scipy.linalg.solve\_continuous\_are(A,B,Q,R)}
-    \item In Drake there is a function \texttt{(K,S) = LinearQuadraticRegulator(A,B,Q,R)}
+%    \item In Drake there is a function \texttt{(K,S) = LinearQuadraticRegulator(A,B,Q,R)}
 \end{itemize}
 
 \end{flushleft}
@@ -357,6 +358,398 @@ There are a number of ways to solve LQR:
 \end{frame}
 
 
+
+
+\begin{frame}{Discrete case}
+	%	\framesubtitle{Numerical methods}
+	\begin{flushleft}
+		
+		Consider discrete dynamics:
+		
+		\begin{equation}
+			\bo{x}_{i+1} = \bo{A}\bo{x}_i + \bo{B}\bo{u}_i
+		\end{equation}
+		
+		with a cost function:
+		
+		\begin{equation}
+			J = \sum_{i=0}^N (\bo{x}_i\T \bo{Q} \bo{x}_i +  \bo{u}_i\T \bo{R} \bo{u}_i)
+		\end{equation}
+		
+		Let us find the optimal control policy for this case.
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Cost function}
+	%	\framesubtitle{Numerical methods}
+	\begin{flushleft}
+		
+		Let us consider a linear control law $\bo{u}_i = - \bo{K}_i \bo{x}_i$. Given initial conditions $\bo{x}_0$ we find $\bo{x}_1$ as:
+		
+		\begin{equation}
+			\bo{x}_1 =(\bo{A} -  \bo{B}\bo{K}_i )\bo{x}_0
+		\end{equation}
+		
+		let us define components of the cost associated with each iteration as $J_1$, $J_2$, etc:
+		
+		\begin{equation}
+			J_i = \bo{x}_i\T \bo{Q} \bo{x}_i +  \bo{u}_i\T \bo{R} \bo{u}_i
+		\end{equation}
+		
+		Since $\bo{u}_0 = - \bo{K} \bo{x}_0$ we can show that $J_1$ is a quadratic form of initial conditions:
+		
+		\begin{equation}
+			J_0 = \bo{x}_0\T (\bo{Q}+   \bo{K}_i\T \bo{R} \bo{K}_i) \bo{x}_0
+		\end{equation}
+		
+		Similarly, we can show that all $J_i$ can be written as a quadratic form of initial conditions.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Cost-to-go, 1}
+	%	\framesubtitle{Numerical methods}
+	\begin{flushleft}
+		
+		Let us define cost-to-go as optimal cost for given initial conditions:
+		%
+		\begin{equation}
+			V_0 = \underset{\bo{u}}{\text{min}} \sum_{i=0}^N (\bo{x}_i\T \bo{Q} \bo{x}_i +  \bo{u}_i\T \bo{R} \bo{u}_i)
+		\end{equation}
+		
+		If $\bo{x}_0$, $\bo{x}_1$, $\bo{x}_2$, ... is a sequence of states that form an optimal trajectory, let us define the cost-to-go starting from each of these states as:
+		%
+		\begin{equation}
+			V_i =  \underset{\bo{u}}{\text{min}} \sum_{k = i}^N (\bo{x}_k\T \bo{Q} \bo{x}_k +  \bo{u}_k\T \bo{R} \bo{u}_k)
+		\end{equation}
+		
+		We can note that the optimal cost will take a form of a quadratic function:
+		
+		\begin{equation}
+			V_i = \bo{x}_i\T \bo{P}_i \bo{x}_i
+		\end{equation}
+		
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Cost-to-go, 2}
+	%	\framesubtitle{Numerical methods}
+	\begin{flushleft}
+		
+		
+		Defining $\bo{x}_0 = \bo{z}$ and $\bo{u}_0 = \bo{w}$ we can write cost-to-go as:
+		
+		\begin{equation}
+			\label{Bellman}
+			V_0(\bo{z}) = \underset{\bo{w}}{\text{min}} 
+			(\bo{z}\T \bo{Q} \bo{z} +  \bo{w}\T \bo{R} \bo{w}  + V_1(\bo{A}\bo{z} + \bo{B}\bo{w})  )
+		\end{equation}
+		%
+		where $V_1(\bo{A}\bo{z} + \bo{B}\bo{w})$ is the optimal cost-to-go on the next step. 
+		
+		\bigskip
+		
+		As the next step is closer to the goal, the optimal cost-to-go on the next step is both smaller than on the current step, and is contained in it.
+		
+		\bigskip
+		
+		The equation \eqref{Bellman} is called \emph{Bellman} equation.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Discrete LQR, 1}
+	%	\framesubtitle{Numerical methods}
+	\begin{flushleft}
+		
+		Since $V_0 = \bo{x}_0\T \bo{P}_0 \bo{x}_0$ and $V_1 = \bo{x}_1\T \bo{P}_1 \bo{x}_1$ we can re-write Bellman equation as:
+		
+		\begin{equation}
+			\bo{z}\T \bo{P}_0 \bo{z}
+			 = \underset{\bo{w}}{\text{min}} 
+			(\bo{z}\T \bo{Q} \bo{z} +  \bo{w}\T \bo{R} \bo{w}  + 
+			(\bo{A}\bo{z} + \bo{B}\bo{w})\T \bo{P}_1 (\bo{A}\bo{z} + \bo{B}\bo{w}) 
+			 )
+		\end{equation}
+		
+		To find minimum over $\bo{w}$ we take partial derivative and set it to zero:
+		
+		\begin{align}
+			\frac{\partial}{\partial \bo{w}}
+			\left( 
+			\bo{z}\T \bo{Q} \bo{z} +  \bo{w}\T \bo{R} \bo{w}  + 
+			(\bo{A}\bo{z} + \bo{B}\bo{w})\T \bo{P}_1 (\bo{A}\bo{z} + \bo{B}\bo{w}) 
+			\right) = 0
+		\end{align}
+		%
+		\begin{align}
+		2\bo{w}\T \bo{R}  + 
+		2(\bo{A}\bo{z} + \bo{B}\bo{w})\T \bo{P}_1 \bo{B} = 0
+		\end{align}
+		%
+		\begin{align}
+			\bo{R}\bo{w} + \bo{B}\T \bo{P}_1 \bo{B} \bo{w} + \bo{B}\T \bo{P}_1 \bo{A}\bo{z} = 0
+		\end{align}
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Discrete LQR, 2}
+	%	\framesubtitle{Numerical methods}
+	\begin{flushleft}
+		
+		From $\bo{R}\bo{w} + \bo{B}\T \bo{P}_1 \bo{B} \bo{w} + \bo{B}\T \bo{P}_1 \bo{A}\bo{z} = 0$, we can find expression for the optimal control law:
+		
+		\begin{align}
+			(\bo{R} + \bo{B}\T \bo{P}_1 \bo{B}) \bo{w} = -\bo{B}\T \bo{P}_1 \bo{A}\bo{z}
+			\\
+			\bo{w} = -(\bo{R} + \bo{B}\T \bo{P}_1 \bo{B})^{-1} \bo{B}\T \bo{P}_1 \bo{A}\bo{z}
+		\end{align}
+		
+		In general, given optimal cost-to-go matrix $\bo{P}_{i+1}$we find optimal control law:
+		
+		\begin{equation}
+			\bo{u}_i = -(\bo{R} + \bo{B}\T \bo{P}_{i+1} \bo{B})^{-1} \bo{B}\T \bo{P}_{i+1} \bo{A}\bo{x}_i
+		\end{equation}
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+
+
+\begin{frame}{Back-propagation, 1}
+	%	\framesubtitle{Numerical methods}
+	\begin{flushleft}
+		
+		Let us define $\bo{M} = (\textcolor{myblue}{\bo{R} + \bo{B}\T \bo{P}_{i+1} \bo{B}})^{-1}$ and $\bo{N} =\textcolor{mydarkgreen}{\bo{B}\T \bo{P}_{i+1} \bo{A}}$ we can re-write the control law:
+		%
+		\begin{equation}
+			\bo{u}_i = -\bo{M} \bo{N} \bo{x}_i
+		\end{equation}
+		
+		We can substitute the control law into the Bellman eq.:
+	%
+		\begin{equation*}
+			\bo{x}_i\T \bo{P}_i \bo{x}_i
+			= \underset{\bo{u}}{\text{min}} 
+			(\bo{x}_i\T \bo{Q} \bo{x}_i +  \textcolor{myred}{\bo{u}_i}\T \bo{R} \textcolor{myred}{\bo{u}_i}  + 
+			(\bo{A}\bo{x}_i + \bo{B}\textcolor{myred}{\bo{u}_i})\T \bo{P}_{i+1} (\bo{A}\bo{x}_i + \bo{B}\textcolor{myred}{\bo{u}_i}) 
+			)
+		\end{equation*}
+		%
+		\begin{align*}
+		\bo{x}_i\T \bo{P}_i \bo{x}_i
+		= 
+		\bo{x}_i\T \bo{Q} \bo{x}_i +  \textcolor{myred}{\bo{x}_i\T \bo{N}\T \bo{M}} \bo{R} \textcolor{myred}{\bo{M} \bo{N} \bo{x}_i}  + 
+		\\
+		+
+		(\bo{A}\bo{x}_i - \bo{B}\textcolor{myred}{\bo{M} \bo{N} \bo{x}_i})\T \bo{P}_{i+1} (\bo{A}\bo{x}_i - \bo{B}\textcolor{myred}{\bo{M} \bo{N} \bo{x}_i}) 
+		\end{align*}
+		%
+		\begin{align*}
+		\bo{P}_i 
+		= 
+		\bo{Q} +  \bo{N}\T \bo{M}\textcolor{myblue}{ \bo{R}} \bo{M} \bo{N} + \bo{A}\T \bo{P}_{i+1} \bo{A} - 
+		\textcolor{mydarkgreen}{\bo{A}\T \bo{P}_{i+1} \bo{B}} \bo{M} \bo{N} - \\
+		 \bo{N}\T  \bo{M} \textcolor{mydarkgreen}{\bo{B}\T  \bo{P}_{i+1} \bo{A}}  +
+		 \bo{N}\T  \bo{M}\textcolor{myblue}{ \bo{B}\T  \bo{P}_{i+1} \bo{B}} \bo{M} \bo{N} 
+		\end{align*}
+		%
+		\begin{align*}\hspace*{-0.8cm} %\scriptstyle
+		\bo{P}_i 
+		= 
+		\bo{Q}  + \bo{A}\T \bo{P}_{i+1} \bo{A}  +  \bo{N}\T \bo{M}\textcolor{myblue}{ (\bo{R} + \bo{B}\T  \bo{P}_{i+1} \bo{B})} \bo{M} \bo{N}
+		-\bo{N}\T \bo{M} \bo{N} 
+		-\bo{N}\T  \bo{M} \bo{N}  
+		\end{align*}
+		%
+		\begin{align*}
+		\bo{P}_i = 	\bo{Q} + \bo{A}\T \bo{P}_{i+1} \bo{A} - \bo{N}\T  \bo{M} \bo{N}  
+		\end{align*}
+		
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Back-propagation, 2}
+	%	\framesubtitle{Numerical methods}
+	\begin{flushleft}
+		
+		From $\bo{P}_i = 	\bo{Q} + \bo{A}\T \bo{P}_{i+1} \bo{A} - \textcolor{mydarkgreen}{\bo{N}}\T  \textcolor{myblue}{\bo{M}} \textcolor{mydarkgreen}{\bo{N}}  $ we obtain the final result:
+		
+		\begin{align*}
+			\bo{P}_i = 	\bo{Q} + \bo{A}\T \bo{P}_{i+1} \bo{A} - 
+			\textcolor{mydarkgreen}{\bo{A}\T\bo{P}_{i+1}\bo{B}}  \textcolor{myblue}{(\bo{R} + \bo{B}\T \bo{P}_{i+1} \bo{B})^{-1} } \textcolor{mydarkgreen}{\bo{B}\T \bo{P}_{i+1} \bo{A}}
+		\end{align*}
+		
+		This equation can be used to compute $\bo{P}_i$ from known $\bo{P}_{i+1}$.
+		
+	\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Further reading}
+	%	\framesubtitle{Numerical methods}
+	\begin{flushleft}
+		
+\begin{itemize}
+	\item \bref{http://underactuated.mit.edu/lqr.html}{Underactuated robotics. Linear Quadratic Regulators}.
+	
+	\item \bref{https://stanford.edu/class/ee363/lectures/dlqr.pdf}{Discrete LQR. Stanford, EE363}.
+	
+	\item \bref{https://web.stanford.edu/class/ee363/lectures/dlqr-ss.pdf}{Discrete LQR (infinite horizon). Stanford, EE363}.
+\end{itemize}
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
 \myqrframe
+
+
+\begin{frame}
+	\centerline{\huge Appendix A: Illustration of HJB}
+\end{frame}
+
+
+\begin{frame}{Optimality, definitions}
+	%\framesubtitle{}
+	\begin{flushleft}
+		
+		Consider the additive cost $J (\bo{x}_0, \pi (\bo{x})) = \int_0^\infty g(\bo{x}, \bo{u}) dt$, where $\bo{u} = \pi (\bo{x})$ is a control policy. The function $g(\bo{x}, \bo{u}) \geq 0$ can be interpreted as a rate of change of cost.
+		
+		\bigskip
+		
+		Let $\pi^*(\bo{x})$ be the optimal control policy. Applying the optimal policy to the dynamics $\dot{\bo{x}} = f(\bo{x}, \bo{u})$ we obtain optimal dynamics:
+		%
+		\begin{equation}
+			\dot{\bo{x}} = f^*(\bo{x}) = f(\bo{x}, \pi^*(\bo{x}))
+		\end{equation}
+		
+		Given initial conditions $\bo{x}_0 = \bo{z}$ we generate an optimal trajectory $\bo{x}^* = \bo{x}^*(t, \bo{z})$. Given optimal trajectory and optimal control policy we find optimal cost:
+		%
+		\begin{equation}
+			J^*(\bo{z}) = J(\bo{z}, \pi^* (\bo{x}))
+		\end{equation}
+		
+		Equivalently, we find optimal instantenious cost:
+		%
+		\begin{equation}
+			g^*(\bo{x}) = g(\bo{x}, \pi^* (\bo{x}))
+		\end{equation}
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Incurred cost}
+	%\framesubtitle{}
+	\begin{flushleft}
+		
+		Since optimal cost depends on initial consitions only, we can find a function $J^* = J^*(\bo{z})$ defined over $\R^n$.
+		
+		\bigskip
+		
+		Lets us consider a trajectory $\bo{x}^* = \bo{x}^*(t, \bo{z})$ and sequential points on this trajectory $\bo{x}_0$, $\bo{x}_1$, $\bo{x}_2$, etc. associated with the time points $t_0$, $t_1$, $t_2$, etc. We can define incurred cost (incurred while moving from the initial state $\bo{z} = \bo{x}_0$ to the given point) for each of these points: $S_0$, $S_1$, $S_2$, etc.:
+		
+		\begin{equation}
+			S_i = \int_0^{t_i} g^*(\bo{x}) dt
+		\end{equation}
+		
+		Since $g^*(\bo{x}) \geq 0$, we observe that $S_0 \leq S_1 \leq S_2 \leq ...$. Moving along a trajectory $\bo{x}^*(t, \bo{z})$ we incur monotonically increasing cost. We can describe it as a time function $S(t)$. The rate of increace of this function is given by instantenious cost $g^*(\bo{x})$.
+		
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Cost-to-go}
+	%\framesubtitle{}
+	\begin{flushleft}
+		
+		We know that the optimal cost from the point $\bo{z}$ is given as $J^*(\bo{z})$. For each sequential point on the trajectory we can define \emph{cost-to-go} $V_i$ as a difference between the optimal cost and the incurred cost:
+		
+		\begin{equation}
+			V_i = J^*(\bo{z}) - S_i
+		\end{equation}
+		
+		For a given trajectory, we can describe cost-to-go as a time function $V(t) = J^*(\bo{z}) - S(t)$. Where as $S(t)$ is monotonically increasing, the function $V(t)$ is monotonically decreasing, with a rate of change given as $-g^*(\bo{x})$.
+		
+		\bigskip
+		
+		Note that the cost-to-go can be equivalently found as:
+		
+		\begin{equation}
+			V(t) = J^*(\bo{x}^*(t))
+		\end{equation}
+		%
+		since the optimal cost we incur by starting from the point $\bo{x}_i$ is equivalent to the cost "have left to incur" when we reach $\bo{x}_i$ from $\bo{x}_0$.
+		
+	\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Optimality}
+	%\framesubtitle{}
+	\begin{flushleft}
+		
+		With that, we can make an observation: for an optimal policy we see the rate of change of the cost-to-go function equal to $-g^*(\bo{x})$. But this rate of change can be found by taking a derivative of $J^*(\bo{x})$ with respect to the vector field $\dot{\bo{x}} = f^*(\bo{x})$:
+		
+		\begin{equation}
+			-g^*(\bo{x}) = \frac{\partial J^*}{\partial \bo{x}} f^*(\bo{x})
+		\end{equation}
+		
+		For sub-optimal control policies, the incurred cost will outpace the decrease of the cost-to-go:
+		
+		\begin{equation}
+			g(\bo{x}, \bo{u}) + \frac{\partial J^*}{\partial \bo{x}} f(\bo{x}, \bo{u}) \geq 0
+		\end{equation}
+		
+		Optimal policy recovers the sought equality:
+		
+		\begin{equation}
+			\underset{\bo{u}}{\min} \ 
+			\left[ 
+			g(\bo{x}, \bo{u}) + 
+			\frac{\partial J^*}{\partial \bo{x}} \bo{f} (\bo{x}, \bo{u}) 
+			\right] = 0
+		\end{equation}
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
 
 \end{document}

@@ -24,12 +24,12 @@
 \begin{itemize}
     \item Matrix exponential
     \item Analytical solution
-    \item Forced state Response
+    \item Forced response
 \end{itemize}
 \item Discretization
 \begin{itemize}
 	\item Exact
-	\item Zero order hold
+	\item Zero-order hold
 \end{itemize}
 \item Read more
 \end{itemize}
@@ -50,16 +50,15 @@ The following dynamical system is called \emph{discrete}:
     \bo{x}_{i+1} = \bo{A}\bo{x}_i + \bo{B}\bo{u}_i
 \end{equation}
 
-Note that those:
 
 \begin{itemize}
-    \item have no derivatives in the equation;
-    \item are easily simulated.
+    \item There are no derivatives in the equation;
+    \item It is easy to simulate.
 \end{itemize}
 
 \bigskip
 
-The affine control for this system can be given as:
+The affine control for this system can be written as:
 
 \begin{equation}
     \bo{u}_i = -\bo{K}\bo{x}_i + \bo{u}_i^*
@@ -72,7 +71,7 @@ The affine control for this system can be given as:
 
 
 \begin{frame}{Stability of the Discrete Dynamics}
-	\framesubtitle{Real eigenvalues}
+%	\framesubtitle{Real eigenvalues}
 	\begin{flushleft}
 		
 		Let us consider stability of the discrete dynamical system where matrix $\bo{A}$ has purely real eigenvalues:
@@ -103,7 +102,7 @@ The affine control for this system can be given as:
 	\framesubtitle{Real eigenvalues}
 	\begin{flushleft}
 		
-		Thus, with $z_{j, i+1} =  \lambda_j z_{j, i}$ we can find now the absolute value of the scalars $z_{j}$ will dwindle with time iff $|\lambda_j| < 1$:
+		Considering individual equations $z_{j, i+1} =  \lambda_j z_{j, i}$ we find that the absolute value of the scalars $z_{j}$ will dwindle with time iff $|\lambda_j| < 1$:
 		
 		\begin{equation}
 			\left| \frac{z_{j, i+1}}{z_{j, i}} \right | =   | \lambda_j |
@@ -213,7 +212,7 @@ The affine control for this system can be given as:
 	| \lambda |^2
 		\end{equation}		
 		
-		We can see that the norm of the variable $\bo{x}$ will dwindle with time iff $|\lambda| < 1$.
+		We can see that the norm of the variable $\bo{x}$ will dwindle iff $|\lambda| < 1$.
 		
 	\end{flushleft}
 \end{frame}
@@ -229,7 +228,7 @@ General stability criterion is given below:
 \bigskip
 
 \begin{block}{Stability criterion}
-In general, discrete system $\bo{x}_{i+1} = \bo{A}\bo{x}_i$ is stable as long as the eigenvalues of $\bo{A}$ are smaller than 1 by absolute value: $|\lambda_i(\bo{A})| \leq 1, \; \forall i$.
+Discrete system $\bo{x}_{i+1} = \bo{A}\bo{x}_i$ is stable as long as the eigenvalues of $\bo{A}$ are smaller than 1 by absolute value: $|\lambda_i(\bo{A})| \leq 1, \; \forall i$.
 \end{block}
 
 \end{flushleft}
@@ -538,7 +537,7 @@ We get discrete dynamics:
 \bo{x}_{i+1} = \bar{\bo{A}} \bo{x}_i + \bar{\bo{B}} \mathbf u_i
 \end{equation}
 
-This way of defining discrete dynamics is called \emph{zero order hold (ZOH)}.
+This way of defining discrete dynamics is called \emph{zero-order hold (ZOH)}.
 
 \end{flushleft}
 \end{frame}
