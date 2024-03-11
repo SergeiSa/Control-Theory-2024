@@ -186,18 +186,18 @@ jobs:
           
           git config --global user.name 'CI PDF compiler'
           git config --global user.email '<>'
-          git add Slides/Introduction/main.pdf
-          git add Slides/Stability/main.pdf
-          git add Slides/Control/main.pdf
-          git add Slides/Laplace/main.pdf
-          git add Slides/Bode/main.pdf
-          git add Slides/Discrete/main.pdf
-          git add Slides/HJB_LQR/main.pdf
-          git add Slides/Observer/main.pdf
-          git add Slides/ControllabilityObservability/main.pdf
-          git add Slides/Kalman/main.pdf
-          git add Slides/Linearization/main.pdf
-          git add Slides/LyapunovTheory/main.pdf
+          git add Slides/Introduction.pdf
+          git add Slides/Stability.pdf
+          git add Slides/Control.pdf
+          git add Slides/Laplace.pdf
+          git add Slides/Bode.pdf
+          git add Slides/Discrete.pdf
+          git add Slides/HJB_LQR.pdf
+          git add Slides/Observer.pdf
+          git add Slides/ControllabilityObservability.pdf
+          git add Slides/Kalman.pdf
+          git add Slides/Linearization.pdf
+          git add Slides/LyapunovTheory.pdf
 
 
 
