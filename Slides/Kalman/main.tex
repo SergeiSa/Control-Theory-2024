@@ -43,7 +43,7 @@
 %\framesubtitle{How do we know the state?}
 \begin{flushleft}
 
-We can think of a \emph{random variable} $\bo{v}$ as a sequence of values $\bo{v}_1$, $\bo{v}_2$, $\bo{v}_3$, ... - sampled from a distribution.
+We can think of a \emph{random variable} $\bo{v}$ as a sequence of values $\bo{v}_1$, $\bo{v}_2$, $\bo{v}_3$, ... sampled from a distribution.
 
 \bigskip
 
@@ -61,7 +61,7 @@ Mean has a number of properties:
 \begin{align}
 	E[\bo{a}] &= \bo{a}, & \bo{a}= \text{const} \\
 	E[\bo{x}+\bo{y}] &= E[\bo{x}] + E[\bo{y}] &\\
-	E[\alpha \bo{x}] &= \alpha  E[\bo{x}]  & \alpha = \text{const}\\
+	E[\alpha \bo{x}] &= \alpha  E[\bo{x}]  & \alpha = \text{const} \in \R \\
 	E[\bo{A} \bo{x}] &= \bo{A}  E[\bo{x}] & \bo{A} = \text{const}
 \end{align}
 
@@ -572,9 +572,15 @@ Mean has a number of properties:
 	%
 		meaning that we minimize mean value of the square of the estimation error. We also know that as long as estimation error on the $i+1$-th step has zero mean (as a random variable), covariance takes the following form: $\bo{P}_{i+1} = E [ \btil{x}_{i+1} \btil{x}_{i+1}\T ]$. Its trace gives us the cost function $J$:
 		
+		
+		
 		\begin{align*}
-			J = E \left[ \text{tr}(\bo{P}_{i+1})  \right] =
-			\text{tr} (E \left[ \bo{P}_{i+1}  \right]) = \\
+			J = E \left[ \text{tr}(\textcolor{mygray}{
+				\btil{x}_{i+1} \btil{x}_{i+1}\T})  \right] =
+			\text{tr} (E \left[ \textcolor{mygray}{
+				\btil{x}_{i+1} \btil{x}_{i+1}\T}  \right]) = 
+				\text{tr} (\bo{P}_{i+1} ) =
+				\\
 			= \text{tr}(
 			(\bo{I} - \bo{L}_i \bo{H}) \bo{P}_{i+1}^- (\bo{I} - \bo{L}_i \bo{H})\T +\bo{L}_i\bo{R}\bo{L}_i\T
 			) = \\

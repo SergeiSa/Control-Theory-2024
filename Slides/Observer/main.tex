@@ -3,7 +3,7 @@
 \input{settings.tex}
 
 
-\title{Observers}
+\title{Luenberger Observer}
 \subtitle{Control Theory, Lecture 8}
 \author{by Sergei Savin}
 \centering
@@ -58,10 +58,10 @@ In practice, we can \emph{estimate} it using \emph{measurement}.
 There are a number of reasons why we can not directly measure the state of the system. Here are some:
 
 \begin{itemize}
+\item \textbf{Lack of sensors.}
 \item Digital measurements are done in discrete time intervals.
-\item Unpredicted events (faults, collisions, etc.).
-\item Un-modelled kinematics or dynamics (links bending, gear box backlash,  friction, etc.) making the very definition of the state disconnected from reality.
-\item Lack of sensors.
+\item Disruption of measurements.
+\item Un-modelled kinematics or dynamics (links bending, gear box backlash, friction, etc.) making the very definition of the state disconnected from reality we want to represent.
 \item Imprecise, nonlinear and biased sensors.
 \item Other physical effects.
 \end{itemize}
@@ -140,12 +140,12 @@ with measurements $\bo{y}$. We want to get as good an estimate of the state $\ha
 
 \bigskip
 
-First note: dynamics should also hold for our observed state:
+Proposal: the dynamics should also hold for the observed state:
 \begin{equation}
 \hat{\dot {\bo{x}}} = \bo{A} \hat{\bo{x}} + \bo{B} \bo{u}
 \end{equation}
 %
-Therefore if we know the initial conditions of our system exactly, and we know our model exactly, we can find exact state of the system without using measurement $\bo{y}$. We can call it an open loop observation. Unfortunately, we know neither the model nor the initial conditions precisely.
+If we knew the initial conditions exactly, we could find the exact state of the system without using measurements $\bo{y}$. We can call it an open loop observation. Unfortunately, we do not know the initial conditions precisely.
 
 
 \end{flushleft}
@@ -159,24 +159,29 @@ Therefore if we know the initial conditions of our system exactly, and we know o
 %\framesubtitle{Observer}
 \begin{flushleft}
 
-We propose \emph{observer} that takes into account measurements in a linear way; analogues with linear control $-\bo{K}\bo{x}$, here we propose a linear law $-\bo{L}\Tilde{\bo{y}}$. Remembering that $\Tilde{\bo{y}} = \bo{C} \hat{\bo{x}} - \bo{y}$ we get:
+We propose \emph{observer} that takes into account measurements in a linear way; similar to linear control $-\bo{K}\bo{x}$, here we propose a linear correction law $-\bo{L}\Tilde{\bo{y}}$. Remembering that $\Tilde{\bo{y}} = \bo{C} \hat{\bo{x}} - \bo{y}$ we get:
 
 \begin{equation}
 \label{eq:Observer}
 \hat{\dot {\bo{x}}} = \bo{A} \hat{\bo{x}} + \bo{B} \bo{u} + \bo{L}(\bo{y} - \bo{C} \hat{\bo{x}})
 \end{equation}
 %
-With this observer, we want to get as good estimate of the state $\hat{\bo{x}}$ as we can.
+This is called \emph{Luenberger observer}. The next task is to find suitable observer gain $ \bo{L}$.
 
 \bigskip
 
-We can subtract \eqref{eq:LTI} from \eqref{eq:Observer}, to get \emph{observer error dynamics}:
+We subtract $\dot {\bo{x}} = \bo{A} \bo{x} + \bo{B} \bo{u}$ from \eqref{eq:Observer}, to get \emph{observer error dynamics}:
 
-\begin{equation}
+\begin{align}
 \hat{\dot {\bo{x}}} - \dot {\bo{x}}= 
 \bo{A} \hat{\bo{x}} - \bo{A} \bo{x} + 
 \bo{L}(\mathbf y - \bo{C} \hat{\bo{x}})
-\end{equation}
+\\
+\hat{\dot {\bo{x}}} - \dot {\bo{x}}
+= 
+\bo{A} (\hat{\bo{x}} -  \bo{x} ) - 
+\bo{L}(\bo{C} \hat{\bo{x}} -  \bo{C} \bo{x} ) 
+\end{align}
 %
 \begin{equation}
 \dot {\varepsilon}= 
@@ -188,7 +193,7 @@ We can subtract \eqref{eq:LTI} from \eqref{eq:Observer}, to get \emph{observer e
 
 
 
-\begin{frame}{Observer gains}
+\begin{frame}{Observer gains, 1}
 %\framesubtitle{Observer gains}
 \begin{flushleft}
 
@@ -200,7 +205,7 @@ The observer $\dot {\varepsilon}=
 \bo{L} \bo{C} \in \mathbb{H}
 \]
 
-We need to find $\bo{L}$. Let us observe the key difference between observer design and controller design:
+We need to find $\bo{L}$. Let us observe a slght difference between observer design and controller design:
 
 \bigskip
 
@@ -211,17 +216,16 @@ We need to find $\bo{L}$. Let us observe the key difference between observer des
 
 \bigskip
 
-We have instruments for finding $\bo{K}$, what about $\bo{L}$?
+The gain is on he left side for teh observer, preventing us from using any of our tools (pole placement, LQR) to tune it.
 
 \end{flushleft}
 \end{frame}
 
 
-\begin{frame}{Observer Design}
-\framesubtitle{General case: design via Riccati eq.}
+\begin{frame}{Observer gains, 2}
 \begin{flushleft}
 
-In general, we can observe that if $\bo{A} - \bo{L} \bo{C}\in \mathbb{H}$, then $(\bo{A} - 
+If $\bo{A} - \bo{L} \bo{C}\in \mathbb{H}$, then $(\bo{A} - 
 \bo{L} \bo{C})^{\top}\in \mathbb{H}$ (eigenvalues of a matrix and its transpose are the same, see Appendix). 
 
 \bigskip
@@ -250,7 +254,7 @@ where $\mathbf Q$ and $\mathbf R$ are weight  matrices, determining the "sensiti
 
 
 
-\begin{frame}{Observation and Control}
+\begin{frame}{Observer + Controller, 1}
 %\framesubtitle{LTI}
 \begin{flushleft}
 
@@ -269,6 +273,16 @@ Thus we get dynamics+observer combination:
 
 where $\bo{A} - \bo{B} \bo{K} \in \mathbb{H}$ and $\bo{A}^{\top} - 
 \bo{C}^{\top} \bo{L}^{\top} \in \mathbb{H}$.
+9
+Let us re-write the dynamics:
+
+\begin{equation}
+	\begin{cases}
+		\dot {\bo{x}} =\bo{A} \bo{x} - \bo{B} \bo{K} \hat{\bo{x}} 
+		\\
+		\hat{\dot {\bo{x}}} = \bo{A} \hat{\bo{x}} - \bo{B} \bo{K}\hat{\bo{x}} +\bo{L}\bo{C} \bo{x} - \bo{L}\bo{C} \hat{\bo{x}}
+	\end{cases}
+\end{equation}
 
 
 \end{flushleft}
@@ -277,7 +291,7 @@ where $\bo{A} - \bo{B} \bo{K} \in \mathbb{H}$ and $\bo{A}^{\top} -
 
 
 
-\begin{frame}{Observation and Control}
+\begin{frame}{Observer + Controller, 1}
 \framesubtitle{Stability analysis}
 \begin{flushleft}
 
@@ -311,7 +325,7 @@ in a matrix form:
 
 \bigskip
 
-We can't directly reason about eigenvalues of this matrix. Next slide will show a way to do it with a change of variables.
+We can't directly reason about eigenvalues of this matrix. But it can be simplified with a change of variables.
 
 \end{flushleft}
 \end{frame}
@@ -413,7 +427,7 @@ Since the eigenvalues of the system are equal to the union of eigenvalues of $(\
 \bigskip
 
 \begin{alertblock}{Separation principle}
-As long as the observer and the controller are stable independently, the overall system is stable too. This is called \emph{separation principle}.
+As long as the observer and the controller are stable independently, the overall system is stable too.
 \end{alertblock}
 
 \end{flushleft}
@@ -472,7 +486,7 @@ As long as the observer and the controller are stable independently, the overall
 \end{frame}
 
 
-\begin{frame}{Appendix B., 1}
+\begin{frame}{Appendix B, 1}
 		\framesubtitle{Eig. values of block-diagonal matrices}
 	\begin{flushleft}
 		
@@ -512,7 +526,7 @@ As long as the observer and the controller are stable independently, the overall
 
 
 
-\begin{frame}{Appendix B., 2}
+\begin{frame}{Appendix B, 2}
 	\framesubtitle{Eig. values of block-diagonal matrices}
 	\begin{flushleft}
 		

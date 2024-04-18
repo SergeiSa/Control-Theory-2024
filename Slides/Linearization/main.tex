@@ -4,7 +4,7 @@
 
 
 \title{Linearization}
-\subtitle{Control Theory, Lecture 11}
+\subtitle{Control Theory, Lecture 12}
 \author{by Sergei Savin}
 \centering
 \date{\mydate}
@@ -49,9 +49,17 @@
 		Where $\bo{x}_0$ and $\bo{u}_0$ are expansion point. We define new variables $\bo{e}$ and $\bo{v}$ as distance from the expansion point:
 		%
 		\begin{align}
-			\bo{e} = \bo{x} - \bo{x}_0, &\ \ \ \dot{\bo{e}} = \dot{\bo{x}}, \\
-			\bo{v} = \bo{u} - \bo{u}_0. &\\
+			\bo{e} = \bo{x} - \bo{x}_0, &\ \ \ 
+			\dot{\bo{e}} = \dot{\bo{x}}, &\ 
+			\bo{v} = \bo{u} - \bo{u}_0.
 		\end{align}
+		
+		With that, we can re-write the Taylor expansion:
+		%
+		\begin{align}
+		\dot{\bo{e}} = \frac{\partial \bo{f}}{\partial \bo{x}} \bo{e} + 
+		\frac{\partial \bo{f}}{\partial \bo{u}} \bo{v} + \text{H.O.T.}
+		\end{align}		
 		
 		
 	\end{flushleft}
@@ -62,12 +70,11 @@
 	%	\framesubtitle{Linearization, Taylor Expansion}
 	\begin{flushleft}
 		
-		With that we can re-write the Taylor expansion:
-		%
+		\textcolor{mygray}{
 		\begin{align}
 			\dot{\bo{e}} = \frac{\partial \bo{f}}{\partial \bo{x}} \bo{e} + 
 			\frac{\partial \bo{f}}{\partial \bo{u}} \bo{v} + \text{H.O.T.}
-		\end{align}		
+		\end{align}		}
 	
 		We can introduce notation:
 		
@@ -76,7 +83,7 @@
 			\bo{B} = \frac{\partial \bo{f}}{\partial \bo{u}}.
 		\end{align}
 		
-		If we drop higher order terms from the Taylor expansion, we obtain \emph{linearization} of the system dynamics:
+		If we drop the higher order terms from the Taylor expansion, we obtain \emph{linearization} of the system dynamics:
 		
 		\begin{align}
 			\dot{\bo{e}} = \bo{A} \bo{e} + \bo{B} \bo{v}
@@ -169,7 +176,7 @@ We will attempt to linearize it.
 \bigskip
 
 We begin by proposing the following new variables:
-
+%
 \begin{align}
 	\bo{x} = 
 	\begin{bmatrix}
@@ -178,13 +185,19 @@ We begin by proposing the following new variables:
 	\end{bmatrix},&  
 \ \ \
 	\bo{u} = \tau - \tau_0
-	\\
-	\bo{q} = \bo{S}_q \bo{x},&  
-	\ \ \
-	\dot{\bo{q}} = \bo{S}_v \bo{x}
 \end{align}
 
-where $\tau_0$ is chosen such that $\bo{C}(\dot{\bo{q}}_0, \bo{q}_0) \dot{\bo{q}}_0 + \bo{g}(\bo{q}_0) = \tau_0$, and $\bo{S}_q$ and $\bo{S}_v$ are choice matrices.
+where $\tau_0$ is chosen such that $\bo{C}(\dot{\bo{q}}_0, \bo{q}_0) \dot{\bo{q}}_0 + \bo{g}(\bo{q}_0) = \tau_0$.
+
+\bigskip
+
+Defining selector matrices $\bo{S}_q = [ \bo{I} \ \ 0 ]$ and $\bo{S}_v = [ 0  \ \ \bo{I} ]$ we can express conversion from the state to generalized position and velocity:
+%
+\begin{align}
+	\bo{q}(\bo{x}) = \bo{S}_q \bo{x} + \bo{q}_0, &  
+	\ \ \
+	\dot{\bo{q}}(\bo{x}) = \bo{S}_v \bo{x} + \dot{\bo{q}}_0
+\end{align}
 
 
 \end{flushleft}
@@ -196,7 +209,7 @@ where $\tau_0$ is chosen such that $\bo{C}(\dot{\bo{q}}_0, \bo{q}_0) \dot{\bo{q}
 %	\framesubtitle{Idea}
 	\begin{flushleft}
 		
-		Next, we introduce function $\phi(\dot{\bo{q}}, \bo{q}, \tau) = \ddot{\bo{q}}$, expressed as:
+		We introduce function $\phi(\dot{\bo{q}}, \bo{q}, \tau) = \ddot{\bo{q}}$, expressed as:
 		
 		\begin{equation}
 			\phi(\dot{\bo{q}}, \bo{q}, \tau) 
@@ -223,9 +236,11 @@ where $\tau_0$ is chosen such that $\bo{C}(\dot{\bo{q}}_0, \bo{q}_0) \dot{\bo{q}
 	\begin{equation}
 	\dot{\bo{x}} 
 	=
+	\varphi(\bo{x}, \bo{u})
+	=
 	\begin{bmatrix}
-		\bo{S}_v \bo{x}  \\ 
-		\phi(\bo{x}, \tau) 
+		\dot{\bo{q}}(\bo{x})  \\ 
+		\phi(\bo{x}, \bo{u}) 
 	\end{bmatrix}
 \end{equation}
 		
@@ -277,7 +292,7 @@ In this case, state matrices $\bo{A}$ and $\bo{B}$ become:
 	\end{bmatrix}
 \end{equation}
 
-Thus. our task is to find the following jacobians: $\frac{\partial \phi}{\partial \bo{q}}$ and $\frac{\partial \phi}{\partial \dot{\bo{q}}}$.
+Thus, our task is to find the following jacobians: $\frac{\partial \phi}{\partial \bo{q}}$ and $\frac{\partial \phi}{\partial \dot{\bo{q}}}$.
 
 \end{flushleft}
 \end{frame}
@@ -306,7 +321,7 @@ Thus. our task is to find the following jacobians: $\frac{\partial \phi}{\partia
 		\begin{align}
 			\frac{\partial \phi}{\partial \bo{q}}
 			&=
-			\bo{H}^{-1} \left( \tau - \frac{\partial \bo{C}\dot{\bo{q}}}{\partial \bo{q}}  - \frac{\partial \bo{g}}{\partial \bo{q}} \right)
+			\bo{H}^{-1} \left( - \frac{\partial \bo{C}\dot{\bo{q}}}{\partial \bo{q}}  - \frac{\partial \bo{g}}{\partial \bo{q}} \right)
 		\end{align}
 		
 	\end{flushleft}

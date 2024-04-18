@@ -1,0 +1,314 @@
+\documentclass{beamer}
+
+\input{settings.tex}
+
+
+\title{Dynamic Controllers, Filters}
+\subtitle{Control Theory, Lecture 9}
+\author{by Sergei Savin}
+\centering
+\date{\mydate}
+
+
+
+\begin{document}
+\maketitle
+
+
+
+\begin{frame}{Content}
+\begin{itemize}
+\item Systems - static, dynamic
+\item Dynaic Controller
+\item PID
+\item Filters
+\end{itemize}
+\end{frame}
+
+
+
+
+\begin{frame}{Systems}
+%\framesubtitle{How do we know the state?}
+\begin{flushleft}
+
+A system is characterized by how it relates its input to its output.
+
+\begin{itemize}
+	\item Controller $\bo{u} = \bo{K}\bo{x}$ is a system that relates $\bo{x}$ - its input - to $\bo{u}$, its output. 
+	
+	\item Plant (in state-space representation) 
+$\begin{cases}
+		\dot {\bo{x}} = \bo{A} \bo{x} + \bo{B} \bo{u} \\
+		\bo{y} = \bo{C} \bo{x}
+	\end{cases}$ 
+relates its input $\bo{u}$ to its output $\bo{y}$.
+
+	\item Plant (in Laplace representation) $Y(s) = W(s)X(s)$ with a transfer function $W(s)$ is a system relating its input signal $X(s)$ to its output signal $Y(s)$.
+\end{itemize}
+
+\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Linear systems, static}
+	%\framesubtitle{How do we know the state?}
+	\begin{flushleft}
+		
+		In this lecture we consider linear systems only. 
+		
+		\bigskip
+		
+		For some systems, the relation between input and output does not depend on time. Such system we can call \emph{static}.
+		
+		\bigskip
+		
+		Examples of static systems:
+		
+		\begin{itemize}
+			\item (State-Space) controller $\bo{u} = \bo{K}\bo{x}$. 
+			
+			\item (Laplace) gain function $Y(s) = 10 X(s)$.
+		\end{itemize}
+		
+	\end{flushleft}
+\end{frame}
+
+
+\begin{frame}{Linear systems, dynamic}
+	%\framesubtitle{How do we know the state?}
+	\begin{flushleft}
+		
+		Alternatively, there are linear systems for which relation between input and output depends on time. Such system we can call \emph{dynamic}.
+		
+		\bigskip
+		
+		Examples of dynamic systems:
+		
+		\begin{itemize}
+			\item (State-Space) plant $\begin{cases}
+				\dot {\bo{x}} = \bo{A} \bo{x} + \bo{B} \bo{u} \\
+				\bo{y} = \bo{C} \bo{x}
+			\end{cases}$.
+			
+			\item (Laplace) plant $Y(s) = \frac{1}{s^2 + 2s + 7} X(s)$.
+			
+			\item (ODE) plant $\ddot y + 5 \dot y + y = u$.
+		\end{itemize}
+		
+		\bigskip
+		
+		For these systems, the output depends not only on the current (time-wise) value of the input, but on the entire history of input values.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Static vs dynamic}
+	%\framesubtitle{How do we know the state?}
+	\begin{flushleft}
+		
+		We can think of static systems as a form of algebraic linear equations, while dynamic systems are linear differential equations.
+		
+		\bigskip
+		
+		The dintinguishing quality of dynamic systems is that they have \emph{state}. We can think of state as an internal variable which changes with time, affecting the relation between the input and the output of the system.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Controller+Observer}
+	%\framesubtitle{How do we know the state?}
+	\begin{flushleft}
+		
+		Controller + Luenberger observer is also a dynamical system with input $\bo{y}$, output $\bo{u}$ and state $\hat{\bo{x}}$:
+		
+		\begin{equation}
+			\begin{cases}
+				\hat{\dot {\bo{x}}} = \bo{A} \hat{\bo{x}} + \bo{B} \mathbf u + \bo{L}(\mathbf y - \bo{C} \hat{\bo{x}})
+				\\
+				\bo{u} = -\bo{K} \hat{\bo{x}}
+			\end{cases}
+		\end{equation}
+		
+		The form of this system resebles the plant with output equation.
+		
+		\bigskip
+		
+		We can think of this system as a \emph{dynamic controller} (rather then separating it into a dynamic observer and a static controller). 
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Dynamic controller}
+	%\framesubtitle{How do we know the state?}
+	\begin{flushleft}
+		
+		A generic form of dynamic controller is:
+		
+		\begin{equation}
+			\begin{cases}
+				\hat{\dot {\bo{x}}} = \bo{A}_k \hat{\bo{x}} + \bo{B}_k \bo{y}
+				\\
+				\bo{u} = \bo{C}_k \hat{\bo{x}} + \bo{D}_k \bo{y}
+			\end{cases}
+		\end{equation}
+		
+		where matrices $\bo{A}_k$, $\bo{B}_k$, $\bo{C}_k$ and $\bo{D}_k$ can be tuned to achieve better performance.
+		
+		\bigskip
+		
+		A Luenberger observer + static controller is a particular instance of dynamic controller.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{PID, 1}
+	%\framesubtitle{How do we know the state?}
+	\begin{flushleft}
+		
+		One of the better known examples of dynamic controlllers is a \emph{proportional-integral-derivative controller (PID)}. Scaler case:
+		
+		\begin{equation}
+			u(t) = k_p e(t) + k_d \frac{d}{dt} e(t) + k_i \int_{0}^{t} e(\tau) d \tau
+		\end{equation}
+		
+		Vector case:
+		
+		\begin{equation}
+			\bo{u}(t) = \bo{K}_p \bo{e}(t) + \bo{K}_d \frac{d}{dt} \bo{e}(t) + \bo{K}_i \int_{0}^{t} \bo{e}(\tau) d \tau
+		\end{equation}
+		
+		This controller works for second-order systems (in $\bo{e}(t)$) where $\bo{e}$ and $\dot{\bo{e}}$ are the state of the system.
+		
+		\bigskip
+		
+		This controller is equivalent to the linear controllers we studied in the course (e.g. LQR) but with integral part allowing for \emph{robustness} - the ability to compensate for static additive disturbance in the model.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{PID, 2}
+	%\framesubtitle{How do we know the state?}
+	\begin{flushleft}
+		
+		We can re-write PID in Laplace space:
+		
+		\begin{equation}
+			U(s) = \left(k_p  + k_d s + k_i \frac{1}{s} \right )E(s)
+		\end{equation}
+		
+		\begin{equation}
+			U(s) =
+			\frac{k_d s^2 + k_p s + k_i }{s}E(s)
+		\end{equation}
+		
+		It is not instantly obvious that the controller has state.
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{PID, 3}
+	%\framesubtitle{How do we know the state?}
+	\begin{flushleft}
+		
+		To re-write it in the state-space form, we introduce input to the controller (output to the plant) $\bo{y} = \begin{bmatrix}
+		\bo{e} \\ \dot{\bo{e}}
+		\end{bmatrix}$. We define a state $\bo{z} = \int_{0}^{t} \bo{e}(\tau) d \tau$, giving us the following state-space form of the controller:
+		
+		\begin{equation}
+			\begin{cases}
+				\dot{ \bo{z} }  = 
+				\begin{bmatrix}
+					\bo{I} & 0
+				\end{bmatrix}\bo{y}
+				\\
+				\bo{u} = \bo{K}_i \bo{z} + 
+				\begin{bmatrix}
+					 \bo{K}_p &  \bo{K}_d
+				\end{bmatrix} \bo{y}
+			\end{cases}
+		\end{equation}
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+\begin{frame}{Filters, 1}
+	%\framesubtitle{How do we know the state?}
+	\begin{flushleft}
+		
+		Consider a system:
+		
+		\begin{equation}
+			\begin{cases}
+				\dot{ x }  = 
+				ax+bu
+				\\
+				y = c x + d \sin(wt)
+			\end{cases}
+		\end{equation}
+		
+		where $w >>0$ is a frequency of the external disturbance and $d$ is it amplitute.
+		
+		\bigskip
+		
+		We can first pass the measurement $y$ through a system that attenuates high-frequency component of a signal; such system is called a \emph{low-pass filter} and then pass it through the controller:
+		
+		\begin{equation}
+			\begin{cases}
+				\dot{ z }  = 
+				-z+y
+				\\
+				u = k z
+			\end{cases}
+		\end{equation}
+		 
+		
+	\end{flushleft}
+\end{frame}
+
+
+
+
+\begin{frame}{Filters, 2}
+	%\framesubtitle{How do we know the state?}
+	\begin{flushleft}
+		
+		The filter $\dot{ z }  = 
+		-z+y$ has a Laplace form:
+		
+		\begin{equation}
+			Z(s) = \frac{1}{s+1} Y(s)
+		\end{equation}
+		
+		Frequency responce of this transfer function is:
+		
+		\begin{equation}
+			W(\omega) = \frac{1}{\sqrt{\omega^2 + 1}} Y(s)
+		\end{equation}
+		
+		As frequency increases, the signal is attenuated more. For frequencies close to zero, the signal passes nearly unchanged.
+		
+	\end{flushleft}
+\end{frame}
+
+
+\myqrframe
+
+\end{document}

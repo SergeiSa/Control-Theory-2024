@@ -4,7 +4,7 @@
 
 
 \title{Lyapunov Theory, Lyapunov equations}
-\subtitle{Control Theory, Lecture 12}
+\subtitle{Control Theory, Lecture 13}
 \author{by Sergei Savin}
 \centering
 \date{\mydate}
@@ -47,9 +47,6 @@ $\dot{\bo{x}} = \bo{f}(\bo{x})$ is stable in the sense of Lyapunov, $\exists V(\
 Function $V(\bo{x}) > 0$ in this case is called \emph{Lyapunov function}.
 \end{definition}
 
-\bigskip
-
-This is not the only type of stability as you remember, you are invited to study criteria for other stability types on your own.
 
 \end{flushleft}
 \end{frame}
@@ -66,7 +63,11 @@ Take dynamical system $\dot{x} = -x$.
 We propose a \emph{Lyapunov function candidate} $V(x) = x^2 \geq 0$. Let's find its derivative:
 
 \begin{equation}
-    \dot V(x) = \frac{\partial V}{\partial x} (-x) = 2x (-x) = -x^2 \leq 0
+    \dot V(x) = 
+    \frac{d}{dt}(  x^2  ) = 
+    2x \dot x =
+    2x (-x) =
+    -x^2 \leq 0
 \end{equation}
 
 This satisfies the Lyapunov criteria, so the system is stable. It is in fact asymptotically stable, because $\dot V(x) \neq 0$ if $x \neq 0$.
@@ -86,14 +87,16 @@ This satisfies the Lyapunov criteria, so the system is stable. It is in fact asy
 		
 		We propose a \emph{Lyapunov function candidate} $V(q, \dot{q}) = E(q, \dot{q}) = \frac{1}{2} \dot{q}^2 + 1 - \cos(q)\geq 0$, where $E(q, \dot{q})$ is total energy of the system. Let's find its derivative:
 		
-		\begin{equation}
-			\dot V(q, \dot{q}) = 
-			\frac{\partial V}{\partial q}       \dot{q} +
-			\frac{\partial V}{\partial \dot{q}} f(q, \dot{q}) = 
-			\dot{q} \sin(q) + \dot{q}(-\dot{q} - \sin(q)) =
-			-\dot{q}^2 \leq 0
-		\end{equation}
 		
+		\begin{align}
+			\dot V(q, \dot{q}) = 
+			\frac{d}{dt} (\frac{1}{2} \dot{q}^2 + 1 - \cos(q)) =
+			\dot{q} \ddot{q} + \sin(q)\dot{q} = \\
+			=
+			\dot{q} (-\dot{q} - \sin(q)) + \sin(q)\dot{q}
+			=
+			-\dot{q}^2 \leq 0
+		\end{align}
 		
 		This satisfies the Lyapunov criteria, so the system is stable. It is not proven to be asymptotically stable, because $\dot V(q, \dot{q}) = 0$ for any $q$, as long as $\dot{q} = 0$.
 		
